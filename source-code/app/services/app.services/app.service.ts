@@ -13,8 +13,13 @@ export class AppService {
     // For first three el-s of HTMLCollection by tag return inager, for others - float.
     collectionDataInputs(tag: string): Array<number>{
         return [].slice.call(document.querySelectorAll(tag)).map((v: any, i: number, arr: HTMLAllCollection) => {
-            return (i === 0 || i === 1 || i === 2) ? parseInt(v.value, 10) : parseFloat(v.value);
+            return (i === 0 || i === 1 || i === 2) ? parseInt(this.isExist(v.value), 10) : parseFloat(this.isExist(v.value));
         });
+    }
+
+    // Return 0 if given value is undef. or null or function return value if it exist.
+    isExist(val: any){
+        return val ? val : 0;
     }
 
     // Collectioned users data transformed to Inputs type.

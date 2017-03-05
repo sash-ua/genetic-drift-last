@@ -18,9 +18,14 @@ var AppService = (function () {
     // Fn used to collect inputted by user data into array.
     // For first three el-s of HTMLCollection by tag return inager, for others - float.
     AppService.prototype.collectionDataInputs = function (tag) {
+        var _this = this;
         return [].slice.call(document.querySelectorAll(tag)).map(function (v, i, arr) {
-            return (i === 0 || i === 1 || i === 2) ? parseInt(v.value, 10) : parseFloat(v.value);
+            return (i === 0 || i === 1 || i === 2) ? parseInt(_this.isExist(v.value), 10) : parseFloat(_this.isExist(v.value));
         });
+    };
+    // Return 0 if given value is undef. or null or function return value if it exist.
+    AppService.prototype.isExist = function (val) {
+        return val ? val : 0;
     };
     // Collectioned users data transformed to Inputs type.
     AppService.prototype.applInputsData = function (inputs, arr) {

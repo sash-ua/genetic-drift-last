@@ -5,7 +5,7 @@ import {FormsModule} from "@angular/forms";
 import {Page404Component} from "./page.404.component/page.404.component";
 import {InstructionComponent} from "./inctruction.component/instruction.component";
 import {ModelingComponent, ModalWindowComponent} from "./modeling.component/modeling.component";
-import {AppRoutingModule} from "./app-routing.module";
+import {AppRoutingModule} from "../app-routing.module";
 import {SharedModule} from "../shared/shared.module";
 import {D3Service} from "../services/d3.service/d3.service";
 import {ComputationService} from "../services/computation.service/computation.service";

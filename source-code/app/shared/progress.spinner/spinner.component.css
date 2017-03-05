@@ -1,0 +1,10 @@
+md-spinner{
+    display: none;
+    position: absolute;
+    bottom: 5vh;
+    left: 50%;
+    margin-left: -50px;
+}
+.visibility{
+    display : block;
+}

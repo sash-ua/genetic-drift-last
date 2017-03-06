@@ -6,7 +6,7 @@ import {Page404Component} from "./core/page.404.component/page.404.component";
 
 
 export const routes: Routes = [
-    { path: '',   redirectTo: 'instruction', pathMatch: 'full' },
+    { path: '', redirectTo: 'instruction', pathMatch: 'full' },
     { path: 'instruction', component: InstructionComponent },
     { path: 'modeling', component: ModelingComponent },
     { path: '**', component: Page404Component }
@@ -14,7 +14,7 @@ export const routes: Routes = [
 
 @NgModule({
     imports: [
-        RouterModule.forRoot(routes)
+        RouterModule.forRoot(routes, { useHash: true })
     ],
     exports: [
         RouterModule

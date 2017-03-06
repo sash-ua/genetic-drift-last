@@ -23,6 +23,7 @@ import {StubComponent} from "./stub.component/stub.component";
         InputComponent,
         SpinnerComponent,
         StubComponent,
+        MaterialModule
     ],
     providers: []
 })

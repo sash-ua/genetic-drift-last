@@ -1,5 +1,4 @@
 import {Component, Input} from "@angular/core";
-import {Range} from "../../core/modeling.component/modeling.component";
 import {InputValidatorService} from "../../services/app.services/inut.validator.service";
 import {MaterialColor} from "../../types/types";
 

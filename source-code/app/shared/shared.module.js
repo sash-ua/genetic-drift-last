@@ -33,6 +33,7 @@ SharedModule = __decorate([
             InputComponent,
             SpinnerComponent,
             StubComponent,
+            MaterialModule
         ],
         providers: []
     })

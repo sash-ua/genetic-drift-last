@@ -27,7 +27,8 @@ var ComputationService = (function () {
         return (Math.random() <= p);
     };
     ;
-    // Calculation of results from function 'fn'. 'fn' return true / false, what balance of results.
+    // Calculation of results from function 'fn'. 'fn' return true / false,
+    // bounchCoin1 returns percentage of 'true' in 'edge' cases. Result (interval[0, 1]).
     ComputationService.prototype.bounchCoin1 = function (_a) {
         var fn = _a[0], edge = _a[1], p = _a[2];
         var h = 0, q = edge;
@@ -43,6 +44,7 @@ var ComputationService = (function () {
         return 1 / N;
     };
     ;
+    // Calculate eff. population size
     ComputationService.prototype.harmonic1 = function (generations) {
         var _this = this;
         return Math.round(generations.length / generations.reduce(function (acc, val) {
@@ -50,7 +52,7 @@ var ComputationService = (function () {
         }, 0));
     };
     ;
-    // BNF & MD interval[0. 1].
+    // BNF & MD interval[0, 1].
     ComputationService.prototype.NRandom = function (_a) {
         var n0 = _a[0], grLim = _a[1], BNF = _a[2], MD = _a[3];
         return Math.random() < BNF
@@ -58,6 +60,7 @@ var ComputationService = (function () {
             : n0 + Math.floor(Math.random() * (1 + grLim - MD));
     };
     ;
+    // Calculate next generation size
     ComputationService.prototype.NGen = function (_a) {
         var fn = _a[0], n0 = _a[1], rLim = _a[2], BNF = _a[3], MD = _a[4];
         var s = [];
@@ -67,6 +70,11 @@ var ComputationService = (function () {
         return (s[1] === 0) ? n0 : fn([n0, rLim, BNF, MD]);
     };
     ;
+    // In context of this application.
+    // cmptnAlleles get (bounchCoin1, origin percentage of one of alleles(initial 0.5), tossing1)([simulations] ) =>
+    // Array of arrays(quantity depends of simulations) of p (for example: percentage of allele A1 in genotype).
+    // Every next p computed randomly, exclude first.
+    // Result [[0.5, 0.48,...],[0.5, 0.7,...]]
     ComputationService.prototype.cmptnAlleles = function (fn, p) {
         var s = [];
         for (var _i = 2; _i < arguments.length; _i++) {

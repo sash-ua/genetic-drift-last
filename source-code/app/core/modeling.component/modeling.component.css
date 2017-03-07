@@ -12,7 +12,6 @@ form{
 #out-chart{
     margin : 0 auto;
     position : relative;
-    width : 1024px;
     cursor : pointer;
 }
 @media (max-width: 1024px) {

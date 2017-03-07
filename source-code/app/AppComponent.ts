@@ -15,7 +15,7 @@ import {Component} from "@angular/core";
                         <a routerLink="/instruction" routerLinkActive="active" [class.activeR]="active" class="nav_link link">Introduction</a>
                     </li>
                     <li class="nav__el">
-                            <a routerLink="/modeling" routerLinkActive="active" [class.activeR]="active" class="nav_link link">Visualization</a>
+                            <a routerLink="/modeling" routerLinkActive="active" [class.activeR]="active" class="nav_link link">Modeling</a>
                     </li>
                 </ul>
             </nav>

@@ -1,7 +1,7 @@
 h2{
     text-align : center;
 }
-.inputs{
+.modeling__inputs{
     display : inline-block;
 }
 form{
@@ -37,6 +37,6 @@ form{
     .wrapper {
         width: 100%; }
 }
-.btn{
+.modeling__btn{
     margin : 20px 50px;
 }

@@ -22,8 +22,8 @@ import {Inputs} from "../../types/types";
             <app-input *ngFor="let input of inputs;" 
                 [app-input-data]="input.preDefData" 
                 [app-input-hint]="input.hint" 
-                [app-input-cond]="input.cond" class="inputs" type="number"></app-input>
-            <button md-raised-button class="btn" id="launch">Launch</button>
+                [app-input-cond]="input.cond" class="modeling__inputs" type="number"></app-input>
+            <button md-raised-button class="modeling__btn" id="modeling___launch">Launch</button>
             <progress-spinner-i [spinner-start-val]="spStVal" 
                                 [spinner-tgl]="spTgl" 
                                 [@openHide]="spTgl"></progress-spinner-i>
@@ -33,8 +33,8 @@ import {Inputs} from "../../types/types";
     styleUrls: ['modeling.component.css'],
     animations: [
         trigger('openHide',[
-            state('true', style({display: 'block', opacity: 1})),
-            state('false', style({display: 'none', opacity: 0})),
+            state('true', style({display: 'block', opacity: 1, transform: 'translateZ(0)'})),
+            state('false', style({display: 'none', opacity: 0, transform: 'translateZ(0)'})),
             transition('* <=> *', [
                 animate(300)
             ])])
@@ -70,7 +70,7 @@ export class ModelingComponent implements OnInit{
     ){}
     ngOnInit(){
         this.render(this.inputs);
-        Observable.fromEvent(document.getElementById('launch'), 'click')
+        Observable.fromEvent(document.getElementById('modeling___launch'), 'click')
             .do(() => {
                 this.spStVal = 0;
                 setTimeout(() => {
@@ -149,7 +149,7 @@ export class ModelingComponent implements OnInit{
 @Component({
     selector: 'modal-wndw',
     template: `
-    <button md-button class="modal-wndw-btn" 
+    <button md-button class="modal-wndw__btn" 
         (click)="dialogRef.close()">X</button>
     <h2>{{ title }}</h2>
     <stub-cmpnt [stub-cmpnt-body]="element"></stub-cmpnt>`,
@@ -160,7 +160,7 @@ export class ModelingComponent implements OnInit{
             margin: 0 0 0 40px;
             padding: 0;
         } 
-        .modal-wndw-btn{
+        .modal-wndw__btn{
             min-width: 40px; 
             padding: 0;
             float: right;

@@ -541,6 +541,9 @@ md-toolbar {
 .md-tooltip {
   background: rgba(97, 97, 97, 0.9); }
 
+* {
+  -webkit-font-smoothing: antialiased; }
+
 body {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -549,6 +552,3 @@ body {
   font-family: Helvetica, Arial,  sans-serif;
   padding: 0;
   margin: 0; }
-
-* {
-  -webkit-font-smoothing: antialiased; }

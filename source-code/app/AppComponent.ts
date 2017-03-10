@@ -6,7 +6,7 @@ import {Component} from "@angular/core";
     template:
     `<div class="wrapper">
         <header>
-            <h1 class="header__title txt">Genetic drift</h1>
+            <h1 class="header__title introduction__txt">Genetic drift</h1>
         </header>
         <main>
             <nav>

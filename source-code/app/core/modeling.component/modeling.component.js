@@ -43,7 +43,7 @@ var ModelingComponent = (function () {
     ModelingComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.render(this.inputs);
-        Observable.fromEvent(document.getElementById('launch'), 'click')
+        Observable.fromEvent(document.getElementById('modeling___launch'), 'click')
             .do(function () {
             _this.spStVal = 0;
             setTimeout(function () {
@@ -97,12 +97,12 @@ __decorate([
 ModelingComponent = __decorate([
     Component({
         moduleId: module.id,
-        template: "<section class=\"wrapper wrapper__modeling\">\n        <h2>Visualization</h2>\n        <form>\n            <app-input *ngFor=\"let input of inputs;\" \n                [app-input-data]=\"input.preDefData\" \n                [app-input-hint]=\"input.hint\" \n                [app-input-cond]=\"input.cond\" class=\"inputs\" type=\"number\"></app-input>\n            <button md-raised-button class=\"btn\" id=\"launch\">Launch</button>\n            <progress-spinner-i [spinner-start-val]=\"spStVal\" \n                                [spinner-tgl]=\"spTgl\" \n                                [@openHide]=\"spTgl\"></progress-spinner-i>\n        </form>\n        <div id=\"out-chart\"></div>\n    </section>",
+        template: "<section class=\"wrapper wrapper__modeling\">\n        <h2>Visualization</h2>\n        <form>\n            <app-input *ngFor=\"let input of inputs;\" \n                [app-input-data]=\"input.preDefData\" \n                [app-input-hint]=\"input.hint\" \n                [app-input-cond]=\"input.cond\" class=\"modeling__inputs\" type=\"number\"></app-input>\n            <button md-raised-button class=\"modeling__btn\" id=\"modeling___launch\">Launch</button>\n            <progress-spinner-i [spinner-start-val]=\"spStVal\" \n                                [spinner-tgl]=\"spTgl\" \n                                [@openHide]=\"spTgl\"></progress-spinner-i>\n        </form>\n        <div id=\"out-chart\"></div>\n    </section>",
         styleUrls: ['modeling.component.css'],
         animations: [
             trigger('openHide', [
-                state('true', style({ display: 'block', opacity: 1 })),
-                state('false', style({ display: 'none', opacity: 0 })),
+                state('true', style({ display: 'block', opacity: 1, transform: 'translateZ(0)' })),
+                state('false', style({ display: 'none', opacity: 0, transform: 'translateZ(0)' })),
                 transition('* <=> *', [
                     animate(300)
                 ])
@@ -134,8 +134,8 @@ var ModalWindowComponent = (function () {
 ModalWindowComponent = __decorate([
     Component({
         selector: 'modal-wndw',
-        template: "\n    <button md-button class=\"modal-wndw-btn\" \n        (click)=\"dialogRef.close()\">X</button>\n    <h2>{{ title }}</h2>\n    <stub-cmpnt [stub-cmpnt-body]=\"element\"></stub-cmpnt>",
-        styles: ["\n        h2{\n            text-align: center; \n            text-transform: uppercase;\n            margin: 0 0 0 40px;\n            padding: 0;\n        } \n        .modal-wndw-btn{\n            min-width: 40px; \n            padding: 0;\n            float: right;\n        }\n    "]
+        template: "\n    <button md-button class=\"modal-wndw__btn\" \n        (click)=\"dialogRef.close()\">X</button>\n    <h2>{{ title }}</h2>\n    <stub-cmpnt [stub-cmpnt-body]=\"element\"></stub-cmpnt>",
+        styles: ["\n        h2{\n            text-align: center; \n            text-transform: uppercase;\n            margin: 0 0 0 40px;\n            padding: 0;\n        } \n        .modal-wndw__btn{\n            min-width: 40px; \n            padding: 0;\n            float: right;\n        }\n    "]
     }),
     __metadata("design:paramtypes", [MdDialogRef])
 ], ModalWindowComponent);

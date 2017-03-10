@@ -1,6 +1,11 @@
 h2{
     text-align : center;
 }
+span, h4{
+    display: block;
+    font-style: italic;
+    text-align: center;
+}
 .wrapper__introduction{
     border-top : 1px solid #AEAEAE;
     -webkit-box-sizing : border-box;
@@ -16,11 +21,6 @@ h2{
     .wrapper {
         width: 100%; }
 }
-.txt {
+.introduction__txt {
     padding : 10px;
-}
-span, h4{
-    display: block;
-    font-style: italic;
-    text-align: center;
 }

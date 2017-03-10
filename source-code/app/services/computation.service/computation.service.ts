@@ -50,7 +50,7 @@ export class ComputationService {
     // cmptnAlleles get (bounchCoin1, origin percentage of one of alleles(initial 0.5), tossing1)([simulations] ) =>
     // Array of arrays(quantity depends of simulations) of p (for example: percentage of allele A1 in genotype).
     // Every next p computed randomly, exclude first.
-    // Result [[0.5, 0.48,...],[0.5, 0.7,...]]
+    // Result [[0.5, 0.48,...],[0.5, 0.7,...],...]
     cmptnAlleles (fn: Function, p: number, ...s: Array<Function>): Function {
         return ([arr]: Array<any>): Array<number> => {
             let a1 = p;

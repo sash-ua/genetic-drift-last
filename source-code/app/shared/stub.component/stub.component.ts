@@ -1,15 +1,16 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, Renderer} from '@angular/core';
 
 @Component({
     moduleId: module.id,
     selector: 'stub-cmpnt',
-    template: ` <span id="svg-out"></span>`
+    template: ` <div id="stub-body"></div>`
 })
 export class StubComponent implements OnInit {
-    constructor() { }
-
+    constructor(
+        private renderer: Renderer
+    ) { }
     ngOnInit() {
-        document.getElementById('svg-out').appendChild(this.body);
+        this.renderer.projectNodes(document.getElementById('stub-body'), [this.body]);
     }
     @Input ('stub-cmpnt-body') body: any;
 }

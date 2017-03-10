@@ -7,24 +7,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component, trigger, state, style, transition, animate, HostListener } from "@angular/core";
+import { Component, trigger, state, style, transition, animate, HostListener, Renderer } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/debounceTime';
-import { MdDialog, MdDialogRef } from "@angular/material";
+import { MdDialogRef } from "@angular/material";
 import { D3Service } from "../../services/d3.service/d3.service";
 import { ComputationService } from "../../services/computation.service/computation.service";
 import { ErrorHandlerService } from "../../services/error.handler.service/error.handler.service";
 import { AppService } from "../../services/app.services/app.service";
 import { DialogsService } from "../../services/app.services/dialogs.service";
+import { FindParentElement } from "../../services/app.services/find.parent.element";
 var ModelingComponent = (function () {
-    function ModelingComponent(d3service, computation, errors, appService, modalWindow, dialogsService) {
+    function ModelingComponent(d3, computation, errors, AS, renderer, DS, FPE) {
+        this.d3 = d3;
         this.computation = computation;
         this.errors = errors;
-        this.appService = appService;
-        this.modalWindow = modalWindow;
-        this.dialogsService = dialogsService;
+        this.AS = AS;
+        this.renderer = renderer;
+        this.DS = DS;
+        this.FPE = FPE;
         this.inputs = [
             { preDefData: 1000, hint: 'Population, min. 2', cond: [2] },
             { preDefData: 100, hint: 'Generations, min. 1', cond: [1] },
@@ -36,7 +39,6 @@ var ModelingComponent = (function () {
         ];
         this.spTgl = 'false';
         this.spStVal = 0;
-        this.d3 = d3service;
     }
     ModelingComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -46,17 +48,17 @@ var ModelingComponent = (function () {
             _this.spStVal = 0;
             setTimeout(function () {
                 _this.spTgl = 'true';
-                _this.spStVal = _this.appService.rndmGen(15, 40);
+                _this.spStVal = _this.AS.rndmGen(15, 40);
             }, 10);
         })
             .debounceTime(400)
             .do(function () {
-            _this.spStVal = _this.appService.rndmGen(55, 70);
-            _this.render(_this.appService.applInputsData(_this.inputs, _this.appService.collectionDataInputs('input')));
+            _this.spStVal = _this.AS.rndmGen(55, 70);
+            _this.render(_this.AS.applInputsData(_this.inputs, _this.AS.collectionDataInputs('input')));
         })
             .debounceTime(300)
             .do(function () {
-            _this.spStVal = _this.appService.rndmGen(75, 95);
+            _this.spStVal = _this.AS.rndmGen(75, 95);
             setTimeout(function () {
                 _this.spTgl = 'false';
                 _this.spStVal = 100;
@@ -64,40 +66,25 @@ var ModelingComponent = (function () {
         })
             .subscribe(function () { }, function (e) { _this.errors.handleError(e); });
     };
-    // Set event listner on host.
+    // Set event listener on host.
     ModelingComponent.prototype.clickHandler = function (e) {
-        var evTarget = e.target;
-        if (evTarget.tagName === 'svg'
-            || evTarget.tagName === 'g'
-            || evTarget.tagName === 'tspan'
-            || evTarget.tagName === 'text'
-            || evTarget.tagName === 'path') {
-            var svg = this.findHTMLElement(evTarget, 'svg').cloneNode(true);
-            var windowW = window.innerWidth
-                || document.documentElement.clientWidth
-                || document.body.clientWidth;
-            var windowH = window.innerHeight
-                || document.documentElement.clientHeight
-                || document.body.clientHeight;
-            var z = (windowW >= windowH) ? (0.35 * windowW) : (0.4 * windowH);
-            svg.setAttribute('preserveAspectRatio', "xMidYMid meet");
-            svg.setAttribute('viewBox', "0 0 305 305");
-            svg.setAttribute('height', "100%");
-            svg.setAttribute('width', z);
-            this.dialogsService
-                .confirm('Graph', svg)
-                .subscribe();
-        }
+        var TARGET = e.target;
+        this.svgAttrSetter(TARGET, ['svg', 'g', 'tspan', 'text', 'path'], 'svg', 'Graph', [['preserveAspectRatio', 'xMidYMid meet'], ['viewBox', '0 0 305 305'], ['height', '100%'], ['width', this.AS.svgWidth(0.35, 0.4)]], this.DS.confirm);
     };
-    // Find parent HTML element by tag name.
-    ModelingComponent.prototype.findHTMLElement = function (el, parName) {
-        return (el.tagName === parName) ? el : (el.parentElement.nodeName === parName) ? el.parentElement : this.findHTMLElement(el.parentElement, parName);
+    ;
+    ModelingComponent.prototype.svgAttrSetter = function (target, tagsArr, svgTag, title, attrs, DSFn) {
+        var _this = this;
+        if (tagsArr.some(function (value) { return target.tagName === value; })) {
+            var SVG_1 = this.FPE.findHTMLElement(target, svgTag).cloneNode(true);
+            attrs.forEach(function (v) { return _this.renderer.setElementAttribute(SVG_1, v[0], v[1]); });
+            DSFn(title, SVG_1).subscribe();
+        }
     };
     // Render array type of Inputs with D3
     ModelingComponent.prototype.render = function (inputs) {
-        var ng = this.computation.arrG(this.computation.NGen, this.computation.NRandom, inputs[0].preDefData, inputs[6].preDefData, inputs[5].preDefData, inputs[4].preDefData)([inputs[1].preDefData]);
+        var NG = this.computation.arrG(this.computation.NGen, this.computation.NRandom, inputs[0].preDefData, inputs[6].preDefData, inputs[5].preDefData, inputs[4].preDefData)([inputs[1].preDefData]);
         // Draw chart
-        this.d3.drawChart(this.computation.arrG(this.computation.cmptnAlleles(this.computation.bounchCoin1, inputs[3].preDefData, this.computation.tossing1), ng)([inputs[2].preDefData]), 'Generations', 'A1', ['Eff. population size:', this.computation.harmonic1(ng), 'Generations: ', inputs[1].preDefData], inputs[1].preDefData, document.getElementById('out-chart'));
+        this.d3.drawChart(this.computation.arrG(this.computation.cmptnAlleles(this.computation.bounchCoin1, inputs[3].preDefData, this.computation.tossing1), NG)([inputs[2].preDefData]), 'Generations', 'A1', ['Eff. population size:', this.computation.harmonic1(NG), 'Generations: ', inputs[1].preDefData], inputs[1].preDefData, document.getElementById('out-chart'));
     };
     return ModelingComponent;
 }());
@@ -125,15 +112,17 @@ ModelingComponent = __decorate([
             ComputationService,
             ErrorHandlerService,
             AppService,
-            DialogsService
+            DialogsService,
+            FindParentElement
         ]
     }),
     __metadata("design:paramtypes", [D3Service,
         ComputationService,
         ErrorHandlerService,
         AppService,
-        MdDialog,
-        DialogsService])
+        Renderer,
+        DialogsService,
+        FindParentElement])
 ], ModelingComponent);
 export { ModelingComponent };
 var ModalWindowComponent = (function () {
@@ -144,7 +133,6 @@ var ModalWindowComponent = (function () {
 }());
 ModalWindowComponent = __decorate([
     Component({
-        moduleId: module.id,
         selector: 'modal-wndw',
         template: "\n    <button md-button class=\"modal-wndw-btn\" \n        (click)=\"dialogRef.close()\">X</button>\n    <h2>{{ title }}</h2>\n    <stub-cmpnt [stub-cmpnt-body]=\"element\"></stub-cmpnt>",
         styles: ["\n        h2{\n            text-align: center; \n            text-transform: uppercase;\n            margin: 0 0 0 40px;\n            padding: 0;\n        } \n        .modal-wndw-btn{\n            min-width: 40px; \n            padding: 0;\n            float: right;\n        }\n    "]

@@ -10,23 +10,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { MdDialog } from '@angular/material';
 import { Injectable } from '@angular/core';
 import { ModalWindowComponent } from "../../core/modeling.component/modeling.component";
-var DialogsService = (function () {
+var DialogsService = DialogsService_1 = (function () {
     function DialogsService(dialog) {
-        this.dialog = dialog;
+        DialogsService_1.dialog = dialog;
     }
     DialogsService.prototype.confirm = function (title, element) {
-        var dialogRef = this.dialog.open(ModalWindowComponent);
+        var dialogRef = DialogsService_1.dialog.open(ModalWindowComponent);
         dialogRef.componentInstance.title = title;
         dialogRef.componentInstance.element = element;
         return dialogRef.afterClosed();
     };
     return DialogsService;
 }());
-DialogsService = __decorate([
+DialogsService = DialogsService_1 = __decorate([
     Injectable(),
     __metadata("design:paramtypes", [MdDialog])
 ], DialogsService);
 export { DialogsService };
+var DialogsService_1;
 //Copyright (c) 2017 Alex Tranchenko. All rights reserved.
 //MIT License. 
 //# sourceMappingURL=dialogs.service.js.map

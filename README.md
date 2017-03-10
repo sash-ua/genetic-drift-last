@@ -1,4 +1,4 @@
-##The web application [Modeling Genetic drift v.1.0.3 (Angular 2), demo]( https://sash-ua.github.io/genetic-drift-last/ ). [Code]( https://github.com/sash-ua/genetic-drift-last ).
+##The web application [Modeling Genetic drift v.1.0.4 (Angular 2), demo]( https://sash-ua.github.io/todo-gendrift-last/ ). [Code]( https://github.com/sash-ua/todo-gendrift-last ).
  
 Angular 2 web-application visualizing Genetic drift in depend of the population's size, increasing or natural population decreasing and some probability processes.
 

@@ -5,12 +5,13 @@ import {ModalWindowComponent} from "../../core/modeling.component/modeling.compo
 
 @Injectable()
 export class DialogsService {
-
-    constructor(private dialog: MdDialog) { }
+    static dialog: MdDialog;
+    constructor(dialog: MdDialog) {
+        DialogsService.dialog = dialog;
+    }
 
     public confirm(title: string, element: any): Observable<boolean> {
-
-        let dialogRef: MdDialogRef<any> = this.dialog.open(ModalWindowComponent);
+        let dialogRef: MdDialogRef<any> = DialogsService.dialog.open(ModalWindowComponent);
         dialogRef.componentInstance.title = title;
         dialogRef.componentInstance.element = element;
         return dialogRef.afterClosed();

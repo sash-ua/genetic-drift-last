@@ -7,12 +7,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component, Input } from '@angular/core';
+import { Component, Input, Renderer } from '@angular/core';
 var StubComponent = (function () {
-    function StubComponent() {
+    function StubComponent(renderer) {
+        this.renderer = renderer;
     }
     StubComponent.prototype.ngOnInit = function () {
-        document.getElementById('svg-out').appendChild(this.body);
+        this.renderer.projectNodes(document.getElementById('stub-body'), [this.body]);
     };
     return StubComponent;
 }());
@@ -24,9 +25,9 @@ StubComponent = __decorate([
     Component({
         moduleId: module.id,
         selector: 'stub-cmpnt',
-        template: " <span id=\"svg-out\"></span>"
+        template: " <div id=\"stub-body\"></div>"
     }),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [Renderer])
 ], StubComponent);
 export { StubComponent };
 //Copyright (c) 2017 Alex Tranchenko. All rights reserved.

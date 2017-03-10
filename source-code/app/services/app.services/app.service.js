@@ -34,6 +34,16 @@ var AppService = (function () {
         });
         return inputs;
     };
+    // width factor(wf), height factor(hf). If window width(ww) > window height(wh) return wf*ww else hf*wh
+    AppService.prototype.svgWidth = function (wf, hf) {
+        var WW = window.innerWidth
+            || document.documentElement.clientWidth
+            || document.body.clientWidth;
+        var WH = window.innerHeight
+            || document.documentElement.clientHeight
+            || document.body.clientHeight;
+        return (WW >= WH) ? (wf * WW) : (hf * WH);
+    };
     return AppService;
 }());
 AppService = __decorate([

@@ -11,17 +11,17 @@ import { Injectable } from '@angular/core';
 var InputValidatorService = (function () {
     function InputValidatorService() {
     }
-    // Input string validation.
-    InputValidatorService.prototype.inputValidator = function (ev, val, cond) {
+    // Input string validation. First stage, second's in app.service.applInputsData
+    InputValidatorService.prototype.inputValidator = function (val, cond) {
         var v = +val;
-        if (v >= cond[0] && !cond[1]) {
+        if (v >= 0 && !cond[1]) {
             return val;
         }
-        else if (v >= cond[0] && cond[1] && v <= cond[1]) {
+        else if (v >= 0 && cond[1] && v <= cond[1]) {
             return val;
         }
         else {
-            return cond[0];
+            return 0;
         }
     };
     return InputValidatorService;

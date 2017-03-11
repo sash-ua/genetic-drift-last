@@ -13,7 +13,7 @@ var ErrorHandlerService = (function () {
     function ErrorHandlerService() {
     }
     ErrorHandlerService.prototype.handleError = function (error) {
-        console.log(error); // log to console instead
+        console.log(error); // log to console instead to pass error to some handler service
         return Observable.throw(error);
     };
     return ErrorHandlerService;

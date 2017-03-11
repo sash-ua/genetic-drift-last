@@ -21,7 +21,7 @@ import {Component} from "@angular/core";
             <span> (previous population) * (1 - (Natural decline * 2)) </span>
         <p class="introduction__txt">Natural decline - natural population decrease, value from 0 to 1.</p>
         <p class="introduction__txt">Natural growth - natural population increase, value from 0 to 1.</p>
-        <h4>Warning:</h4><span>Be careful inputting large values, they initiate a large amount of computation that can hang your computer!</span>
+        <h4>Warning:</h4><span>Be careful inputting large values, they initiate a large amount of computation that can hang your browser!</span>
     </section>`,
     styleUrls: ['instruction.component.css'],
     providers: []

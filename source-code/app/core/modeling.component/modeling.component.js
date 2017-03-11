@@ -7,9 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component, trigger, state, style, transition, animate, HostListener, Renderer } from "@angular/core";
+import { Component, trigger, state, style, transition, animate, HostListener } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/observable/empty';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/debounceTime';
 import { MdDialogRef } from "@angular/material";
@@ -19,37 +19,55 @@ import { ErrorHandlerService } from "../../services/error.handler.service/error.
 import { AppService } from "../../services/app.services/app.service";
 import { DialogsService } from "../../services/app.services/dialogs.service";
 import { FindParentElement } from "../../services/app.services/find.parent.element";
+import { DOMService } from "../../services/app.services/dom.service";
 var ModelingComponent = (function () {
-    function ModelingComponent(d3, computation, errors, AS, renderer, DS, FPE) {
+    function ModelingComponent(d3, computation, errors, AS, DS, FPE, DOM) {
         this.d3 = d3;
         this.computation = computation;
         this.errors = errors;
         this.AS = AS;
-        this.renderer = renderer;
         this.DS = DS;
         this.FPE = FPE;
+        this.DOM = DOM;
+        this.MWTITLE = "Graph";
+        this.SVGATTRS = [['preserveAspectRatio', 'xMidYMid meet'], ['viewBox', '0 0 305 305'], ['height', '100%'], ['width', this.AS.dimension(0.35, 0.4)]];
+        this.SVGCOMPS = ['svg', 'g', 'tspan', 'text', 'path'];
         this.inputs = [
-            { preDefData: 1000, hint: 'Population, min. 2', cond: [2] },
-            { preDefData: 100, hint: 'Generations, min. 1', cond: [1] },
-            { preDefData: 2, hint: 'Simulations, min. 1', cond: [1] },
-            { preDefData: 0.5, hint: 'Init. Alleles Balance, [0, 1]', cond: [0, 1] },
-            { preDefData: 0.1, hint: 'Bottle Neck Probability, [0, 1]', cond: [0, 1] },
-            { preDefData: 0.15, hint: 'Natural decline, [0, 1]', cond: [0, 1] },
-            { preDefData: 0.2, hint: 'Natural growth, [0, 1]', cond: [0, 1] }
+            { preDefData: 1000, hint: 'Population, min. 2', dvdrColor: 'warn', interval: [2] },
+            { preDefData: 100, hint: 'Generations, min. 1', dvdrColor: 'warn', interval: [1] },
+            { preDefData: 2, hint: 'Simulations, min. 1', dvdrColor: 'warn', interval: [1] },
+            { preDefData: 0.5, hint: 'Init. Alleles Balance, [0, 1]', dvdrColor: 'primary', interval: [0, 1] },
+            { preDefData: 0.1, hint: 'Bottle Neck Probability, [0, 1]', dvdrColor: 'primary', interval: [0, 1] },
+            { preDefData: 0.15, hint: 'Natural decline, [0, 1]', dvdrColor: 'primary', interval: [0, 1] },
+            { preDefData: 0.2, hint: 'Natural growth, [0, 1]', dvdrColor: 'primary', interval: [0, 1] }
         ];
         this.spTgl = 'false';
         this.spStVal = 0;
     }
     ModelingComponent.prototype.ngOnInit = function () {
-        var _this = this;
         this.render(this.inputs);
-        Observable.fromEvent(document.getElementById('modeling___launch'), 'click')
+    };
+    // Set event listener on the host.
+    ModelingComponent.prototype.clickHandler = function (e) {
+        var TARGET = e.target;
+        if (this.DOM.compare(TARGET, this.SVGCOMPS)) {
+            var SVG = this.FPE.findHTMLElement(TARGET, 'svg').cloneNode(true);
+            this.DOM.svgAttrSetter(SVG, this.SVGATTRS);
+            this.DS.confirm(this.MWTITLE, SVG);
+        }
+    };
+    ;
+    ModelingComponent.prototype.visualizationHandler = function () {
+        var _this = this;
+        Observable.create(function (observer) {
+            observer.next();
+        })
             .do(function () {
             _this.spStVal = 0;
             setTimeout(function () {
                 _this.spTgl = 'true';
                 _this.spStVal = _this.AS.rndmGen(15, 40);
-            }, 10);
+            }, 4);
         })
             .debounceTime(400)
             .do(function () {
@@ -65,20 +83,6 @@ var ModelingComponent = (function () {
             }, 200);
         })
             .subscribe(function () { }, function (e) { _this.errors.handleError(e); });
-    };
-    // Set event listener on host.
-    ModelingComponent.prototype.clickHandler = function (e) {
-        var TARGET = e.target;
-        this.svgAttrSetter(TARGET, ['svg', 'g', 'tspan', 'text', 'path'], 'svg', 'Graph', [['preserveAspectRatio', 'xMidYMid meet'], ['viewBox', '0 0 305 305'], ['height', '100%'], ['width', this.AS.svgWidth(0.35, 0.4)]], this.DS.confirm);
-    };
-    ;
-    ModelingComponent.prototype.svgAttrSetter = function (target, tagsArr, svgTag, title, attrs, DSFn) {
-        var _this = this;
-        if (tagsArr.some(function (value) { return target.tagName === value; })) {
-            var SVG_1 = this.FPE.findHTMLElement(target, svgTag).cloneNode(true);
-            attrs.forEach(function (v) { return _this.renderer.setElementAttribute(SVG_1, v[0], v[1]); });
-            DSFn(title, SVG_1).subscribe();
-        }
     };
     // Render array type of Inputs with D3
     ModelingComponent.prototype.render = function (inputs) {
@@ -97,7 +101,7 @@ __decorate([
 ModelingComponent = __decorate([
     Component({
         moduleId: module.id,
-        template: "<section class=\"wrapper wrapper__modeling\">\n        <h2>Visualization</h2>\n        <form>\n            <app-input *ngFor=\"let input of inputs;\" \n                [app-input-data]=\"input.preDefData\" \n                [app-input-hint]=\"input.hint\" \n                [app-input-cond]=\"input.cond\" class=\"modeling__inputs\" type=\"number\"></app-input>\n            <button md-raised-button class=\"modeling__btn\" id=\"modeling___launch\">Launch</button>\n            <progress-spinner-i [spinner-start-val]=\"spStVal\" \n                                [spinner-tgl]=\"spTgl\" \n                                [@openHide]=\"spTgl\"></progress-spinner-i>\n        </form>\n        <div id=\"out-chart\"></div>\n    </section>",
+        template: "<section class=\"wrapper wrapper__modeling\">\n        <h2>Visualization</h2>\n        <form>\n            <app-input *ngFor=\"let input of inputs;\" \n                [app-input-data]=\"[input.preDefData, input.hint, input.dvdrColor, input.interval]\" \n                class=\"modeling__inputs\" type=\"number\"></app-input>\n            <button md-raised-button class=\"modeling__btn\" (click)=\"visualizationHandler()\">Launch</button>\n            <progress-spinner-i [spinner-start-val]=\"spStVal\" \n                                [spinner-tgl]=\"spTgl\" \n                                [@openHide]=\"spTgl\"></progress-spinner-i>\n        </form>\n        <div id=\"out-chart\"></div>\n    </section>",
         styleUrls: ['modeling.component.css'],
         animations: [
             trigger('openHide', [
@@ -113,16 +117,17 @@ ModelingComponent = __decorate([
             ErrorHandlerService,
             AppService,
             DialogsService,
-            FindParentElement
+            FindParentElement,
+            DOMService
         ]
     }),
     __metadata("design:paramtypes", [D3Service,
         ComputationService,
         ErrorHandlerService,
         AppService,
-        Renderer,
         DialogsService,
-        FindParentElement])
+        FindParentElement,
+        DOMService])
 ], ModelingComponent);
 export { ModelingComponent };
 var ModalWindowComponent = (function () {

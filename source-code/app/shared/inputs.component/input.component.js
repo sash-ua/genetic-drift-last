@@ -12,7 +12,6 @@ import { InputValidatorService } from "../../services/app.services/inut.validato
 var InputComponent = (function () {
     function InputComponent(validation) {
         this.validation = validation;
-        this.dvdrClr = 'warn';
     }
     return InputComponent;
 }());
@@ -20,22 +19,10 @@ __decorate([
     Input('app-input-data'),
     __metadata("design:type", String)
 ], InputComponent.prototype, "preDefData", void 0);
-__decorate([
-    Input('app-input-hint'),
-    __metadata("design:type", String)
-], InputComponent.prototype, "hint", void 0);
-__decorate([
-    Input('app-input-cond'),
-    __metadata("design:type", Array)
-], InputComponent.prototype, "cond", void 0);
-__decorate([
-    Input('app-input-dividerColor'),
-    __metadata("design:type", String)
-], InputComponent.prototype, "dvdrClr", void 0);
 InputComponent = __decorate([
     Component({
         selector: 'app-input',
-        template: "<md-input [value]=\"preDefData\" [hintLabel]=\"hint\" class=\"my-input\" [dividerColor]=\"dvdrClr\"  (keyup)=\"id.value = validation.inputValidator($event, id.value, cond)\" #id ></md-input>",
+        template: "<md-input \n            [value]=\"preDefData[0]\" \n            [hintLabel]=\"preDefData[1]\" \n            [dividerColor]=\"preDefData[2]\" \n            (input)=\"id.value = validation.inputValidator(id.value, preDefData[3])\" \n            #id \n            class=\"my-input\"></md-input>",
         styles: ['.my-input { margin: 20px 10px}'],
         providers: [
             InputValidatorService

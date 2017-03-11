@@ -16,7 +16,7 @@ var AppService = (function () {
         return Math.floor(Math.random() * (max - min) + min);
     };
     // Fn used to collect inputted by user data into array.
-    // For first three el-s of HTMLCollection by tag return inager, for others - float.
+    // For first three el-s of HTMLCollection by tag return integer, for others - float.
     AppService.prototype.collectionDataInputs = function (tag) {
         var _this = this;
         return [].slice.call(document.querySelectorAll(tag)).map(function (v, i, arr) {
@@ -27,15 +27,21 @@ var AppService = (function () {
     AppService.prototype.isExist = function (val) {
         return val ? val : 0;
     };
-    // Collectioned users data transformed to Inputs type.
+    // Return arr: Inputs from collectioned users data, if they acceptable they add to returned array.
+    // (values should be from acceptable interval of possible values)
     AppService.prototype.applInputsData = function (inputs, arr) {
-        inputs.forEach(function (v, i, a) {
-            v.preDefData = arr[i];
+        return inputs.map(function (v, i, a) {
+            if (arr[i] >= v.interval[0]) {
+                v.preDefData = arr[i];
+                return v;
+            }
+            else {
+                return v;
+            }
         });
-        return inputs;
     };
     // width factor(wf), height factor(hf). If window width(ww) > window height(wh) return wf*ww else hf*wh
-    AppService.prototype.svgWidth = function (wf, hf) {
+    AppService.prototype.dimension = function (wf, hf) {
         var WW = window.innerWidth
             || document.documentElement.clientWidth
             || document.body.clientWidth;

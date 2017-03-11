@@ -10,7 +10,7 @@ export class AppService {
     }
 
     // Fn used to collect inputted by user data into array.
-    // For first three el-s of HTMLCollection by tag return inager, for others - float.
+    // For first three el-s of HTMLCollection by tag return integer, for others - float.
     collectionDataInputs(tag: string): Range{
         return [].slice.call(document.querySelectorAll(tag)).map((v: any, i: number, arr: HTMLAllCollection) => {
             return (i === 0 || i === 1 || i === 2) ? parseInt(this.isExist(v.value), 10) : parseFloat(this.isExist(v.value));
@@ -22,15 +22,20 @@ export class AppService {
         return val ? val : 0;
     }
 
-    // Collectioned users data transformed to Inputs type.
+    // Return arr: Inputs from collectioned users data, if they acceptable they add to returned array.
+    // (values should be from acceptable interval of possible values)
     applInputsData(inputs: Inputs, arr: Range): Inputs {
-        inputs.forEach((v, i, a) => {
-            v.preDefData = arr[i];
+        return  inputs.map((v, i, a) => {
+            if(arr[i] >= v.interval[0]){
+                v.preDefData = arr[i];
+                return v;
+            } else {
+                return v;
+            }
         });
-        return inputs;
     }
     // width factor(wf), height factor(hf). If window width(ww) > window height(wh) return wf*ww else hf*wh
-    svgWidth(wf: number, hf: number): number{
+    dimension(wf: number, hf: number): number{
         const WW = window.innerWidth
             || document.documentElement.clientWidth
             || document.body.clientWidth;

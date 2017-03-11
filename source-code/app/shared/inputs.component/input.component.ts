@@ -5,7 +5,13 @@ import {MaterialColor} from "../../types/types";
 @Component({
     selector: 'app-input',
     template:
-        `<md-input [value]="preDefData" [hintLabel]="hint" class="my-input" [dividerColor]="dvdrClr"  (keyup)="id.value = validation.inputValidator($event, id.value, cond)" #id ></md-input>`,
+        `<md-input 
+            [value]="preDefData[0]" 
+            [hintLabel]="preDefData[1]" 
+            [dividerColor]="preDefData[2]" 
+            (input)="id.value = validation.inputValidator(id.value, preDefData[3])" 
+            #id 
+            class="my-input"></md-input>`,
     styles:['.my-input { margin: 20px 10px}'],
     providers:[
         InputValidatorService
@@ -14,9 +20,6 @@ import {MaterialColor} from "../../types/types";
  export  class  InputComponent{
     constructor(private validation: InputValidatorService){}
     @Input('app-input-data') preDefData: string;
-    @Input('app-input-hint') hint: string;
-    @Input('app-input-cond') cond: Array<number>;
-    @Input('app-input-dividerColor') dvdrClr: MaterialColor = 'warn';
 }
 
 //Copyright (c) 2017 Alex Tranchenko. All rights reserved.

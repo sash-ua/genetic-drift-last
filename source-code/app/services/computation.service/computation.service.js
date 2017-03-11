@@ -54,25 +54,25 @@ var ComputationService = (function () {
     ;
     // BNF & MD interval[0, 1].
     ComputationService.prototype.NRandom = function (_a) {
-        var n0 = _a[0], grLim = _a[1], BNF = _a[2], MD = _a[3];
+        var n0 = _a[0], growth = _a[1], BNF = _a[2], MD = _a[3];
         return Math.random() < BNF
-            ? n0 + Math.floor(Math.random() * (1 + grLim - MD) - (Math.random() * (n0 * (1 - (MD * 2)))))
-            : n0 + Math.floor(Math.random() * (1 + grLim - MD));
+            ? n0 + Math.floor(Math.random() * (1 + growth - MD) - (Math.random() * (n0 * (1 - (MD * 2)))))
+            : n0 + Math.floor(Math.random() * (1 + growth - MD));
     };
     ;
     // Calculate next generation size
     ComputationService.prototype.NGen = function (_a) {
-        var fn = _a[0], n0 = _a[1], rLim = _a[2], BNF = _a[3], MD = _a[4];
+        var fn = _a[0], n0 = _a[1], growth = _a[2], BNF = _a[3], MD = _a[4];
         var s = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             s[_i - 1] = arguments[_i];
         }
-        return (s[1] === 0) ? n0 : fn([n0, rLim, BNF, MD]);
+        return (s[1] === 0) ? n0 : fn([n0, growth, BNF, MD]);
     };
     ;
     // In context of this application.
     // cmptnAlleles get (bounchCoin1, origin percentage of one of alleles(initial 0.5), tossing1)([simulations] ) =>
-    // Array of arrays(quantity depends of simulations) of p (for example: percentage of allele A1 in genotype).
+    // Array of arrays(quantity depends of simulations) of p (for example: percentage of allele A1 in the genotype).
     // Every next p computed randomly, exclude first.
     // Result [[0.5, 0.48,...],[0.5, 0.7,...],...]
     ComputationService.prototype.cmptnAlleles = function (fn, p) {

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component, trigger, state, style, transition, animate, HostListener } from "@angular/core";
+import { Component, trigger, state, style, transition, animate, HostListener, HostBinding } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import 'rxjs/add/observable/empty';
 import 'rxjs/add/operator/do';
@@ -20,6 +20,7 @@ import { AppService } from "../../services/app.services/app.service";
 import { DialogsService } from "../../services/app.services/dialogs.service";
 import { FindParentElement } from "../../services/app.services/find.parent.element";
 import { DOMService } from "../../services/app.services/dom.service";
+import { slideInRightAnimation } from "../../animations/router.animations";
 var ModelingComponent = (function () {
     function ModelingComponent(d3, computation, errors, AS, DS, FPE, DOM) {
         this.d3 = d3;
@@ -33,16 +34,18 @@ var ModelingComponent = (function () {
         this.SVGATTRS = [['preserveAspectRatio', 'xMidYMid meet'], ['viewBox', '0 0 305 305'], ['height', '100%'], ['width', this.AS.dimension(0.35, 0.4)]];
         this.SVGCOMPS = ['svg', 'g', 'tspan', 'text', 'path'];
         this.inputs = [
-            { preDefData: 1000, hint: 'Population, min. 2', dvdrColor: 'warn', interval: [2] },
-            { preDefData: 100, hint: 'Generations, min. 1', dvdrColor: 'warn', interval: [1] },
-            { preDefData: 2, hint: 'Simulations, min. 1', dvdrColor: 'warn', interval: [1] },
-            { preDefData: 0.5, hint: 'Init. Alleles Balance, [0, 1]', dvdrColor: 'primary', interval: [0, 1] },
-            { preDefData: 0.1, hint: 'Bottle Neck Probability, [0, 1]', dvdrColor: 'primary', interval: [0, 1] },
-            { preDefData: 0.15, hint: 'Natural decline, [0, 1]', dvdrColor: 'primary', interval: [0, 1] },
-            { preDefData: 0.2, hint: 'Natural growth, [0, 1]', dvdrColor: 'primary', interval: [0, 1] }
+            { preDefData: 1000, hint: 'Population, min. 2', dvdrColor: 'warn', interval: [2], toolTip: 'Integer number from 2' },
+            { preDefData: 100, hint: 'Generations, min. 1', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1' },
+            { preDefData: 2, hint: 'Simulations, min. 1', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1' },
+            { preDefData: 0.5, hint: 'Init. Alleles Balance, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.164' },
+            { preDefData: 0.1, hint: 'Bottle Neck Probability, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.2' },
+            { preDefData: 0.15, hint: 'Natural decline, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.77.' },
+            { preDefData: 0.2, hint: 'Natural growth, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.09.' }
         ];
         this.spTgl = 'false';
         this.spStVal = 0;
+        this.routeAnimationRight = true;
+        this.position = 'absolute';
     }
     ModelingComponent.prototype.ngOnInit = function () {
         this.render(this.inputs);
@@ -98,10 +101,18 @@ __decorate([
     __metadata("design:paramtypes", [Event]),
     __metadata("design:returntype", void 0)
 ], ModelingComponent.prototype, "clickHandler", null);
+__decorate([
+    HostBinding('@routeAnimationRight'),
+    __metadata("design:type", Object)
+], ModelingComponent.prototype, "routeAnimationRight", void 0);
+__decorate([
+    HostBinding('style.position'),
+    __metadata("design:type", Object)
+], ModelingComponent.prototype, "position", void 0);
 ModelingComponent = __decorate([
     Component({
         moduleId: module.id,
-        template: "<section class=\"wrapper wrapper__modeling\">\n        <h2>Visualization</h2>\n        <form>\n            <app-input *ngFor=\"let input of inputs;\" \n                [app-input-data]=\"[input.preDefData, input.hint, input.dvdrColor, input.interval]\" \n                class=\"modeling__inputs\" type=\"number\"></app-input>\n            <button md-raised-button class=\"modeling__btn\" (click)=\"visualizationHandler()\">Launch</button>\n            <progress-spinner-i [spinner-start-val]=\"spStVal\" \n                                [spinner-tgl]=\"spTgl\" \n                                [@openHide]=\"spTgl\"></progress-spinner-i>\n        </form>\n        <div id=\"out-chart\"></div>\n    </section>",
+        template: "<section class=\"wrapper wrapper__modeling\">\n        <h2>Visualization</h2>\n        <form>\n            <app-input *ngFor=\"let input of inputs;\" \n                [app-input-data]=\"[input.preDefData, input.hint, input.dvdrColor, input.interval]\" \n                [mdTooltip]=\"input.toolTip\"\n                [mdTooltipPosition]=\"'left'\"\n                [mdTooltipShowDelay]=\"30\"\n                class=\"modeling__inputs\" type=\"number\"></app-input>\n            <button md-raised-button class=\"modeling__btn\" (click)=\"visualizationHandler()\">Launch</button>\n            <progress-spinner-i [spinner-start-val]=\"spStVal\" \n                                [spinner-tgl]=\"spTgl\" \n                                [@openHide]=\"spTgl\"></progress-spinner-i>\n        </form>\n        <div id=\"out-chart\"></div>\n    </section>",
         styleUrls: ['modeling.component.css'],
         animations: [
             trigger('openHide', [
@@ -110,7 +121,8 @@ ModelingComponent = __decorate([
                 transition('* <=> *', [
                     animate(300)
                 ])
-            ])
+            ]),
+            slideInRightAnimation
         ],
         providers: [
             ComputationService,

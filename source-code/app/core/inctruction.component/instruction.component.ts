@@ -1,5 +1,6 @@
 
-import {Component} from "@angular/core";
+import {Component, HostBinding} from "@angular/core";
+import {slideInLeftAnimation} from "../../animations/router.animations";
 
 @Component({
     moduleId: module.id,
@@ -24,12 +25,16 @@ import {Component} from "@angular/core";
         <h4>Warning:</h4><span>Be careful inputting large values, they initiate a large amount of computation that can hang your browser!</span>
     </section>`,
     styleUrls: ['instruction.component.css'],
-    providers: []
+    providers: [],
+    animations: [
+        slideInLeftAnimation
+    ]
 
 })
 
 export class InstructionComponent{
-
+    @HostBinding('@routeAnimationLeft') routeAnimationLeft = true;
+    @HostBinding('style.position')  position = 'absolute';
 }
 //Copyright (c) 2017 Alex Tranchenko. All rights reserved.
 //MIT License.

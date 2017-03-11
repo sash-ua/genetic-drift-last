@@ -1,5 +1,5 @@
 
-import {Component, OnInit, trigger, state, style, transition, animate, HostListener} from "@angular/core";
+import {Component, OnInit, trigger, state, style, transition, animate, HostListener, HostBinding} from "@angular/core";
 import {Observable} from "rxjs/Observable";
 import 'rxjs/add/observable/empty';
 import 'rxjs/add/operator/do';
@@ -13,6 +13,7 @@ import {DialogsService} from "../../services/app.services/dialogs.service";
 import {FindParentElement} from "../../services/app.services/find.parent.element";
 import {Inputs, svgAttributes} from "../../types/types";
 import {DOMService} from "../../services/app.services/dom.service";
+import {slideInRightAnimation} from "../../animations/router.animations";
 
 @Component({
     moduleId: module.id,
@@ -22,6 +23,9 @@ import {DOMService} from "../../services/app.services/dom.service";
         <form>
             <app-input *ngFor="let input of inputs;" 
                 [app-input-data]="[input.preDefData, input.hint, input.dvdrColor, input.interval]" 
+                [mdTooltip]="input.toolTip"
+                [mdTooltipPosition]="'left'"
+                [mdTooltipShowDelay]="30"
                 class="modeling__inputs" type="number"></app-input>
             <button md-raised-button class="modeling__btn" (click)="visualizationHandler()">Launch</button>
             <progress-spinner-i [spinner-start-val]="spStVal" 
@@ -37,7 +41,8 @@ import {DOMService} from "../../services/app.services/dom.service";
             state('false', style({display: 'none', opacity: 0, transform: 'translateZ(0)'})),
             transition('* <=> *', [
                 animate(300)
-            ])])
+            ])]),
+        slideInRightAnimation
     ],
     providers: [
         ComputationService,
@@ -53,13 +58,13 @@ export class ModelingComponent implements OnInit{
     private SVGATTRS: svgAttributes = [['preserveAspectRatio', 'xMidYMid meet'], ['viewBox', '0 0 305 305'], ['height', '100%'], ['width', this.AS.dimension(0.35, 0.4)]];
     private SVGCOMPS: Array<string> = ['svg', 'g', 'tspan', 'text', 'path'];
     private inputs: Inputs = [
-        {preDefData: 1000, hint: 'Population, min. 2', dvdrColor: 'warn', interval: [2]},
-        {preDefData: 100, hint: 'Generations, min. 1', dvdrColor: 'warn', interval: [1]},
-        {preDefData: 2, hint: 'Simulations, min. 1', dvdrColor: 'warn', interval: [1]},
-        {preDefData: 0.5, hint: 'Init. Alleles Balance, [0, 1]', dvdrColor: 'primary', interval: [0, 1]},
-        {preDefData: 0.1, hint: 'Bottle Neck Probability, [0, 1]', dvdrColor: 'primary', interval: [0, 1]},
-        {preDefData: 0.15, hint: 'Natural decline, [0, 1]', dvdrColor: 'primary', interval: [0, 1]},
-        {preDefData: 0.2, hint: 'Natural growth, [0, 1]', dvdrColor: 'primary', interval: [0, 1]}];
+        {preDefData: 1000, hint: 'Population, min. 2', dvdrColor: 'warn', interval: [2], toolTip: 'Integer number from 2'},
+        {preDefData: 100, hint: 'Generations, min. 1', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1'},
+        {preDefData: 2, hint: 'Simulations, min. 1', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1'},
+        {preDefData: 0.5, hint: 'Init. Alleles Balance, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.164'},
+        {preDefData: 0.1, hint: 'Bottle Neck Probability, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.2'},
+        {preDefData: 0.15, hint: 'Natural decline, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.77.'},
+        {preDefData: 0.2, hint: 'Natural growth, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.09.'}];
     private spTgl: string = 'false';
     private spStVal: number = 0;
 
@@ -84,6 +89,8 @@ export class ModelingComponent implements OnInit{
             this.DS.confirm(this.MWTITLE, SVG)
         }
     };
+    @HostBinding('@routeAnimationRight') routeAnimationRight = true;
+    @HostBinding('style.position')  position = 'absolute';
 
     visualizationHandler(): void {
         Observable.create((observer: any) => {

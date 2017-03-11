@@ -6,10 +6,10 @@ import {MaterialColor} from "../../types/types";
     selector: 'app-input',
     template:
         `<md-input 
-            [value]="preDefData[0]" 
-            [hintLabel]="preDefData[1]" 
-            [dividerColor]="preDefData[2]" 
-            (input)="id.value = validation.inputValidator(id.value, preDefData[3])" 
+            [value]="input.preDefData" 
+            [hintLabel]="input.hint" 
+            [dividerColor]="input.dvdrColor" 
+            (input)="id.value = validation.inputValidator(id.value, input.interval)" 
             #id 
             class="my-input"></md-input>`,
     styles:['.my-input { margin: 20px 10px}'],
@@ -19,7 +19,7 @@ import {MaterialColor} from "../../types/types";
 })
  export  class  InputComponent{
     constructor(private validation: InputValidatorService){}
-    @Input('app-input-data') preDefData: string;
+    @Input('app-input-data') input: string;
 }
 
 //Copyright (c) 2017 Alex Tranchenko. All rights reserved.

@@ -18,11 +18,11 @@ var InputComponent = (function () {
 __decorate([
     Input('app-input-data'),
     __metadata("design:type", String)
-], InputComponent.prototype, "preDefData", void 0);
+], InputComponent.prototype, "input", void 0);
 InputComponent = __decorate([
     Component({
         selector: 'app-input',
-        template: "<md-input \n            [value]=\"preDefData[0]\" \n            [hintLabel]=\"preDefData[1]\" \n            [dividerColor]=\"preDefData[2]\" \n            (input)=\"id.value = validation.inputValidator(id.value, preDefData[3])\" \n            #id \n            class=\"my-input\"></md-input>",
+        template: "<md-input \n            [value]=\"input.preDefData\" \n            [hintLabel]=\"input.hint\" \n            [dividerColor]=\"input.dvdrColor\" \n            (input)=\"id.value = validation.inputValidator(id.value, input.interval)\" \n            #id \n            class=\"my-input\"></md-input>",
         styles: ['.my-input { margin: 20px 10px}'],
         providers: [
             InputValidatorService

@@ -1,7 +1,7 @@
 
 import {Component, OnInit, trigger, state, style, transition, animate, HostListener, HostBinding} from "@angular/core";
 import {Observable} from "rxjs/Observable";
-import 'rxjs/add/observable/empty';
+import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/debounceTime';
 import {MdDialog, MdDialogRef} from "@angular/material";
@@ -22,12 +22,12 @@ import {slideInRightAnimation} from "../../animations/router.animations";
         <h2>Visualization</h2>
         <form>
             <app-input *ngFor="let input of inputs;" 
-                [app-input-data]="[input.preDefData, input.hint, input.dvdrColor, input.interval]" 
+                [app-input-data]="input" 
                 [mdTooltip]="input.toolTip"
                 [mdTooltipPosition]="'left'"
-                [mdTooltipShowDelay]="30"
+                [mdTooltipShowDelay]="50"
                 class="modeling__inputs" type="number"></app-input>
-            <button md-raised-button class="modeling__btn" (click)="visualizationHandler()">Launch</button>
+            <button md-raised-button class="modeling__btn" id="launch">Launch</button>
             <progress-spinner-i [spinner-start-val]="spStVal" 
                                 [spinner-tgl]="spTgl" 
                                 [@openHide]="spTgl"></progress-spinner-i>
@@ -58,13 +58,13 @@ export class ModelingComponent implements OnInit{
     private SVGATTRS: svgAttributes = [['preserveAspectRatio', 'xMidYMid meet'], ['viewBox', '0 0 305 305'], ['height', '100%'], ['width', this.AS.dimension(0.35, 0.4)]];
     private SVGCOMPS: Array<string> = ['svg', 'g', 'tspan', 'text', 'path'];
     private inputs: Inputs = [
-        {preDefData: 1000, hint: 'Population, min. 2', dvdrColor: 'warn', interval: [2], toolTip: 'Integer number from 2'},
-        {preDefData: 100, hint: 'Generations, min. 1', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1'},
-        {preDefData: 2, hint: 'Simulations, min. 1', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1'},
-        {preDefData: 0.5, hint: 'Init. Alleles Balance, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.164'},
-        {preDefData: 0.1, hint: 'Bottle Neck Probability, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.2'},
-        {preDefData: 0.15, hint: 'Natural decline, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.77.'},
-        {preDefData: 0.2, hint: 'Natural growth, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.09.'}];
+        {preDefData: 1000, hint: 'Population', dvdrColor: 'warn', interval: [2], toolTip: 'Integer number from 2'},
+        {preDefData: 100, hint: 'Generations', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1'},
+        {preDefData: 2, hint: 'Simulations', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1'},
+        {preDefData: 0.5, hint: 'Init. Alleles Balance', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.164'},
+        {preDefData: 0.1, hint: 'Bottle Neck Probability', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.2'},
+        {preDefData: 0.15, hint: 'Natural decline', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.77.'},
+        {preDefData: 0.2, hint: 'Natural growth', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.09.'}];
     private spTgl: string = 'false';
     private spStVal: number = 0;
 
@@ -79,29 +79,14 @@ export class ModelingComponent implements OnInit{
     ){}
     ngOnInit(){
         this.render(this.inputs);
-    }
-    // Set event listener on the host.
-    @HostListener('click', ['$event']) clickHandler(e: Event){
-        const TARGET: any = e.target;
-        if(this.DOM.compare(TARGET, this.SVGCOMPS)){
-            const SVG = this.FPE.findHTMLElement(TARGET, 'svg').cloneNode(true);
-            this.DOM.svgAttrSetter(SVG, this.SVGATTRS);
-            this.DS.confirm(this.MWTITLE, SVG)
-        }
-    };
-    @HostBinding('@routeAnimationRight') routeAnimationRight = true;
-    @HostBinding('style.position')  position = 'absolute';
 
-    visualizationHandler(): void {
-        Observable.create((observer: any) => {
-            observer.next();
-        })
+        Observable.fromEvent(document.getElementById('launch'), 'click')
             .do(() => {
-            this.spStVal = 0;
-            setTimeout(() => {
-                this.spTgl = 'true';
-                this.spStVal = this.AS.rndmGen(15, 40);
-            }, 4)
+                this.spStVal = 0;
+                setTimeout(() => {
+                    this.spTgl = 'true';
+                    this.spStVal = this.AS.rndmGen(15, 40);
+                }, 4)
             })
             .debounceTime(400)
             .do(()=> {
@@ -121,6 +106,17 @@ export class ModelingComponent implements OnInit{
                 (e: Error) => {this.errors.handleError(e);}
             );
     }
+    // Set event listener on the host.
+    @HostListener('click', ['$event']) clickHandler(e: Event){
+        const TARGET: any = e.target;
+        if(this.DOM.compare(TARGET, this.SVGCOMPS)){
+            const SVG = this.FPE.findHTMLElement(TARGET, 'svg').cloneNode(true);
+            this.DOM.svgAttrSetter(SVG, this.SVGATTRS);
+            this.DS.confirm(this.MWTITLE, SVG)
+        }
+    };
+    @HostBinding('@routeAnimationRight') routeAnimationRight = true;
+    @HostBinding('style.position')  position = 'absolute';
 
     // Render array type of Inputs with D3
     render(inputs: Inputs): void {

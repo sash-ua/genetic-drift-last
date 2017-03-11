@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Component, trigger, state, style, transition, animate, HostListener, HostBinding } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import 'rxjs/add/observable/empty';
+import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/debounceTime';
 import { MdDialogRef } from "@angular/material";
@@ -34,13 +34,13 @@ var ModelingComponent = (function () {
         this.SVGATTRS = [['preserveAspectRatio', 'xMidYMid meet'], ['viewBox', '0 0 305 305'], ['height', '100%'], ['width', this.AS.dimension(0.35, 0.4)]];
         this.SVGCOMPS = ['svg', 'g', 'tspan', 'text', 'path'];
         this.inputs = [
-            { preDefData: 1000, hint: 'Population, min. 2', dvdrColor: 'warn', interval: [2], toolTip: 'Integer number from 2' },
-            { preDefData: 100, hint: 'Generations, min. 1', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1' },
-            { preDefData: 2, hint: 'Simulations, min. 1', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1' },
-            { preDefData: 0.5, hint: 'Init. Alleles Balance, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.164' },
-            { preDefData: 0.1, hint: 'Bottle Neck Probability, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.2' },
-            { preDefData: 0.15, hint: 'Natural decline, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.77.' },
-            { preDefData: 0.2, hint: 'Natural growth, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.09.' }
+            { preDefData: 1000, hint: 'Population', dvdrColor: 'warn', interval: [2], toolTip: 'Integer number from 2' },
+            { preDefData: 100, hint: 'Generations', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1' },
+            { preDefData: 2, hint: 'Simulations', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1' },
+            { preDefData: 0.5, hint: 'Init. Alleles Balance', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.164' },
+            { preDefData: 0.1, hint: 'Bottle Neck Probability', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.2' },
+            { preDefData: 0.15, hint: 'Natural decline', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.77.' },
+            { preDefData: 0.2, hint: 'Natural growth', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.09.' }
         ];
         this.spTgl = 'false';
         this.spStVal = 0;
@@ -48,23 +48,9 @@ var ModelingComponent = (function () {
         this.position = 'absolute';
     }
     ModelingComponent.prototype.ngOnInit = function () {
-        this.render(this.inputs);
-    };
-    // Set event listener on the host.
-    ModelingComponent.prototype.clickHandler = function (e) {
-        var TARGET = e.target;
-        if (this.DOM.compare(TARGET, this.SVGCOMPS)) {
-            var SVG = this.FPE.findHTMLElement(TARGET, 'svg').cloneNode(true);
-            this.DOM.svgAttrSetter(SVG, this.SVGATTRS);
-            this.DS.confirm(this.MWTITLE, SVG);
-        }
-    };
-    ;
-    ModelingComponent.prototype.visualizationHandler = function () {
         var _this = this;
-        Observable.create(function (observer) {
-            observer.next();
-        })
+        this.render(this.inputs);
+        Observable.fromEvent(document.getElementById('launch'), 'click')
             .do(function () {
             _this.spStVal = 0;
             setTimeout(function () {
@@ -87,6 +73,16 @@ var ModelingComponent = (function () {
         })
             .subscribe(function () { }, function (e) { _this.errors.handleError(e); });
     };
+    // Set event listener on the host.
+    ModelingComponent.prototype.clickHandler = function (e) {
+        var TARGET = e.target;
+        if (this.DOM.compare(TARGET, this.SVGCOMPS)) {
+            var SVG = this.FPE.findHTMLElement(TARGET, 'svg').cloneNode(true);
+            this.DOM.svgAttrSetter(SVG, this.SVGATTRS);
+            this.DS.confirm(this.MWTITLE, SVG);
+        }
+    };
+    ;
     // Render array type of Inputs with D3
     ModelingComponent.prototype.render = function (inputs) {
         var NG = this.computation.arrG(this.computation.NGen, this.computation.NRandom, inputs[0].preDefData, inputs[6].preDefData, inputs[5].preDefData, inputs[4].preDefData)([inputs[1].preDefData]);
@@ -112,7 +108,7 @@ __decorate([
 ModelingComponent = __decorate([
     Component({
         moduleId: module.id,
-        template: "<section class=\"wrapper wrapper__modeling\">\n        <h2>Visualization</h2>\n        <form>\n            <app-input *ngFor=\"let input of inputs;\" \n                [app-input-data]=\"[input.preDefData, input.hint, input.dvdrColor, input.interval]\" \n                [mdTooltip]=\"input.toolTip\"\n                [mdTooltipPosition]=\"'left'\"\n                [mdTooltipShowDelay]=\"30\"\n                class=\"modeling__inputs\" type=\"number\"></app-input>\n            <button md-raised-button class=\"modeling__btn\" (click)=\"visualizationHandler()\">Launch</button>\n            <progress-spinner-i [spinner-start-val]=\"spStVal\" \n                                [spinner-tgl]=\"spTgl\" \n                                [@openHide]=\"spTgl\"></progress-spinner-i>\n        </form>\n        <div id=\"out-chart\"></div>\n    </section>",
+        template: "<section class=\"wrapper wrapper__modeling\">\n        <h2>Visualization</h2>\n        <form>\n            <app-input *ngFor=\"let input of inputs;\" \n                [app-input-data]=\"input\" \n                [mdTooltip]=\"input.toolTip\"\n                [mdTooltipPosition]=\"'left'\"\n                [mdTooltipShowDelay]=\"50\"\n                class=\"modeling__inputs\" type=\"number\"></app-input>\n            <button md-raised-button class=\"modeling__btn\" id=\"launch\">Launch</button>\n            <progress-spinner-i [spinner-start-val]=\"spStVal\" \n                                [spinner-tgl]=\"spTgl\" \n                                [@openHide]=\"spTgl\"></progress-spinner-i>\n        </form>\n        <div id=\"out-chart\"></div>\n    </section>",
         styleUrls: ['modeling.component.css'],
         animations: [
             trigger('openHide', [

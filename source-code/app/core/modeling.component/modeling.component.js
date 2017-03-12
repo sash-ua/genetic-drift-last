@@ -12,6 +12,7 @@ import { Observable } from "rxjs/Observable";
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/map';
 import { MdDialogRef } from "@angular/material";
 import { D3Service } from "../../services/d3.service/d3.service";
 import { ComputationService } from "../../services/computation.service/computation.service";

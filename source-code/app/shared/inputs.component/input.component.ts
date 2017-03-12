@@ -1,6 +1,5 @@
 import {Component, Input} from "@angular/core";
 import {InputValidatorService} from "../../services/app.services/inut.validator.service";
-import {MaterialColor} from "../../types/types";
 
 @Component({
     selector: 'app-input',
@@ -19,7 +18,7 @@ import {MaterialColor} from "../../types/types";
 })
  export  class  InputComponent{
     constructor(private validation: InputValidatorService){}
-    @Input('app-input-data') input: string;
+    @Input('app-input-data') input: object;
 }
 
 //Copyright (c) 2017 Alex Tranchenko. All rights reserved.

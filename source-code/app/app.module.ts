@@ -11,7 +11,6 @@ import {SharedModule} from "./shared/shared.module";
 import {AppComponent} from "./AppComponent";
 import {ErrorHandlerService} from "./services/error.handler.service/error.handler.service";
 
-
 @NgModule({
     imports: [
         BrowserModule,

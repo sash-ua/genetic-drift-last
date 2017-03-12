@@ -17,7 +17,7 @@ var InputComponent = (function () {
 }());
 __decorate([
     Input('app-input-data'),
-    __metadata("design:type", Object)
+    __metadata("design:type", String)
 ], InputComponent.prototype, "input", void 0);
 InputComponent = __decorate([
     Component({

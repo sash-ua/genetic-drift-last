@@ -4,6 +4,7 @@ import {InstructionComponent} from "./core/inctruction.component/instruction.com
 import {ModelingComponent} from "./core/modeling.component/modeling.component";
 import {Page404Component} from "./core/page.404.component/page.404.component";
 
+
 export const routes: Routes = [
     { path: '', redirectTo: 'instruction', pathMatch: 'full' },
     { path: 'instruction', component: InstructionComponent },

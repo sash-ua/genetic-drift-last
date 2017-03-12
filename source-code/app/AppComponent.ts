@@ -1,12 +1,10 @@
 import {Component} from "@angular/core";
-import "hammerjs";
-import {Router} from "@angular/router";
 
 @Component({
     moduleId: module.id,
     selector: 'app-root',
     template:
-    `<div (swipe)="onSwipe($event)" class="wrapper">
+    `<div class="wrapper">
         <header>
             <h1 class="header__title introduction__txt">Genetic drift</h1>
         </header>
@@ -29,18 +27,7 @@ import {Router} from "@angular/router";
     providers: []
 })
 
-export class AppComponent {
-    constructor(
-        private router: Router
-    ){}
-    protected onSwipe(e: Event){
-        if(e.offsetDirection === 4){
-            this.router.navigate(['/instruction']);
-        } else if (e.offsetDirection === 2){
-            this.router.navigate(['/modeling']);
-        }
-    }
-}
+export class AppComponent {}
 
 //Copyright (c) 2017 Alex Tranchenko. All rights reserved.
 //MIT License.

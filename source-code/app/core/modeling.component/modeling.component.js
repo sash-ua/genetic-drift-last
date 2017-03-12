@@ -9,7 +9,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Component, trigger, state, style, transition, animate, HostListener, HostBinding } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/debounceTime';
 import { MdDialogRef } from "@angular/material";

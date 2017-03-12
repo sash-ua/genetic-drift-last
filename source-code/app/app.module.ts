@@ -1,6 +1,6 @@
 // angular's modules
 import {NgModule} from "@angular/core";
-import {BrowserModule} from "@angular/platform-browser";
+import {BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig} from "@angular/platform-browser";
 import {FormsModule} from "@angular/forms";
 // UI
 import {MaterialModule} from "@angular/material";
@@ -10,6 +10,7 @@ import {SharedModule} from "./shared/shared.module";
 // Components & services
 import {AppComponent} from "./AppComponent";
 import {ErrorHandlerService} from "./services/error.handler.service/error.handler.service";
+import {HammerConfig} from "./configs/hammerjs.config";
 
 
 @NgModule({
@@ -18,7 +19,7 @@ import {ErrorHandlerService} from "./services/error.handler.service/error.handle
         FormsModule,
         SharedModule,
         CoreModule,
-        MaterialModule.forRoot(),
+        MaterialModule.forRoot()
     ],
     declarations: [
         AppComponent
@@ -28,7 +29,8 @@ import {ErrorHandlerService} from "./services/error.handler.service/error.handle
     ],
     exports: [],
     providers: [
-        ErrorHandlerService
+        ErrorHandlerService,
+        { provide: HAMMER_GESTURE_CONFIG, useClass: HammerConfig }
     ]
 })
 export class AppModule {}

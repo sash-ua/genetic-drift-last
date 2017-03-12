@@ -1,7 +1,5 @@
-
 import {Component, OnInit, trigger, state, style, transition, animate, HostListener, HostBinding} from "@angular/core";
 import {Observable} from "rxjs/Observable";
-import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/debounceTime';
 import {MdDialog, MdDialogRef} from "@angular/material";
@@ -79,7 +77,6 @@ export class ModelingComponent implements OnInit{
     ){}
     ngOnInit(){
         this.render(this.inputs);
-
         Observable.fromEvent(document.getElementById('launch'), 'click')
             .do(() => {
                 this.spStVal = 0;

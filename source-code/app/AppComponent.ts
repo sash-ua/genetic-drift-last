@@ -31,7 +31,7 @@ import "hammerjs";
 
 export class AppComponent {
     constructor(
-        private router: Router
+        private router: Router,
     ){}
     protected onSwipe(e: Event){
         if(e.offsetDirection === 4){

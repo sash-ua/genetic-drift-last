@@ -1,13 +1,12 @@
 import {HammerGestureConfig} from "@angular/platform-browser";
 
 export class HammerConfig extends HammerGestureConfig {
-    // override default settings
-    overrides: {[key: string]: object} = {
-        'swipe': {velocity: 0.35, threshold: 15}
-    };
+    // overrides default settings
     buildHammer(element: HTMLElement) {
-        return new Hammer(element, {
-            touchAction: "pan-y",
+        return new Hammer.Manager(element, {
+            recognizers: [
+                [Hammer.Swipe,{ direction: Hammer.DIRECTION_HORIZONTAL, velocity: 0.30, threshold: 30 }],
+            ]
         });
     }
 }

@@ -12,16 +12,14 @@ import { HammerGestureConfig } from "@angular/platform-browser";
 var HammerConfig = (function (_super) {
     __extends(HammerConfig, _super);
     function HammerConfig() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        // override default settings
-        _this.overrides = {
-            'swipe': { velocity: 0.35, threshold: 15 }
-        };
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
+    // overrides default settings
     HammerConfig.prototype.buildHammer = function (element) {
-        return new Hammer(element, {
-            touchAction: "pan-y",
+        return new Hammer.Manager(element, {
+            recognizers: [
+                [Hammer.Swipe, { direction: Hammer.DIRECTION_HORIZONTAL, velocity: 0.30, threshold: 30 }],
+            ]
         });
     };
     return HammerConfig;

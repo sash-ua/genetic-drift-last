@@ -1,7 +1,7 @@
 import {
     Injectable, trigger, state, style, transition, animate, AnimationEntryMetadata
 } from '@angular/core';
-import {AnimationT, AnimationStylesT} from "../types/types";
+import {AnimationT, AnimationStylesT} from "../../types/types";
 
 @Injectable()
 export class AnimationsServices {

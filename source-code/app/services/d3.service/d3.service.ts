@@ -52,12 +52,13 @@ export class D3Service{
     let svg = d3.select(appendTo).append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
+        .attr("data-d3-graph", "1")
         .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
     svg.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
+        .attr("transform", `translate(0,${height})`)
         .call(xAxis)
         .append("text")
         .style("text-anchor", "middle")

@@ -21,6 +21,14 @@ var DOMService = (function () {
         var _this = this;
         attrs.forEach(function (v) { return _this.renderer.setElementAttribute(svg, v[0], v[1]); });
     };
+    // Find parent HTML element by tag name.
+    DOMService.prototype.findHTMLElement = function (el, parentName) {
+        return (el.nodeName === parentName)
+            ? el
+            : (el.parentNode.nodeName === parentName)
+                ? el.parentNode
+                : this.findHTMLElement(el.parentNode, parentName);
+    };
     return DOMService;
 }());
 DOMService = __decorate([

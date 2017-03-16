@@ -39,8 +39,9 @@ var D3Service = (function () {
         var svg = d3.select(appendTo).append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
+            .attr("data-d3-graph", "1")
             .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
         svg.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")

@@ -17,17 +17,15 @@ import { ComputationService } from "../../services/computation.service/computati
 import { ErrorHandlerService } from "../../services/error.handler.service/error.handler.service";
 import { AppService } from "../../services/app.services/app.service";
 import { DialogsService } from "../../services/app.services/dialogs.service";
-import { FindParentElement } from "../../services/app.services/find.parent.element";
 import { DOMService } from "../../services/app.services/dom.service";
 import { AnimationsServices } from "../../services/animations.service/animations.service";
 var ModelingComponent = (function () {
-    function ModelingComponent(d3, computation, errors, AS, DS, FPE, DOM) {
+    function ModelingComponent(d3, computation, errors, AS, DS, DOM) {
         this.d3 = d3;
         this.computation = computation;
         this.errors = errors;
         this.AS = AS;
         this.DS = DS;
-        this.FPE = FPE;
         this.DOM = DOM;
         this.MWTITLE = "Graph";
         this.SVGATTRS = [['preserveAspectRatio', 'xMidYMid meet'], ['viewBox', '0 0 305 305'], ['height', '100%'], ['width', this.AS.dimension(0.35, 0.4)]];
@@ -50,16 +48,21 @@ var ModelingComponent = (function () {
     ModelingComponent.prototype.clickHandler = function (e) {
         var TARGET = e.target;
         if (this.DOM.compare(TARGET, this.SVGCOMPS)) {
-            var SVG = this.FPE.findHTMLElement(TARGET, 'svg').cloneNode(true);
-            this.DOM.svgAttrSetter(SVG, this.SVGATTRS);
-            this.DS.confirm(this.MWTITLE, SVG);
+            var SVG = this.DOM.findHTMLElement(TARGET, 'svg');
+            if (SVG.getAttribute('data-d3-graph')) {
+                var SVGClONE = SVG.cloneNode(true);
+                this.DOM.svgAttrSetter(SVGClONE, this.SVGATTRS);
+                this.DS.confirm(this.MWTITLE, SVGClONE);
+            }
         }
     };
     ;
     ModelingComponent.prototype.ngAfterViewInit = function () {
         var _this = this;
         var GV = this.graphView.nativeElement;
+        // Generate graph while rendering page.
         this.render(this.inputs, GV);
+        // Button 'Lunch' handler. Produce D3 Graph after clicking and manage spinner.
         Observable.fromEvent(this.launch.nativeElement, 'click')
             .do(function () {
             _this.spStVal = 0;
@@ -127,7 +130,6 @@ ModelingComponent = __decorate([
             ErrorHandlerService,
             AppService,
             DialogsService,
-            FindParentElement,
             DOMService
         ]
     }),
@@ -136,7 +138,6 @@ ModelingComponent = __decorate([
         ErrorHandlerService,
         AppService,
         DialogsService,
-        FindParentElement,
         DOMService])
 ], ModelingComponent);
 export { ModelingComponent };

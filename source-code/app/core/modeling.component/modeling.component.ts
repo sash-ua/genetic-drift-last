@@ -11,7 +11,6 @@ import {ComputationService} from "../../services/computation.service/computation
 import {ErrorHandlerService} from "../../services/error.handler.service/error.handler.service";
 import {AppService} from "../../services/app.services/app.service";
 import {DialogsService} from "../../services/app.services/dialogs.service";
-import {FindParentElement} from "../../services/app.services/find.parent.element";
 import {Inputs, svgAttributes} from "../../types/types";
 import {DOMService} from "../../services/app.services/dom.service";
 import {AnimationsServices} from "../../services/animations.service/animations.service";
@@ -56,7 +55,6 @@ import {AnimationsServices} from "../../services/animations.service/animations.s
         ErrorHandlerService,
         AppService,
         DialogsService,
-        FindParentElement,
         DOMService
     ]
 })
@@ -81,7 +79,6 @@ export class ModelingComponent implements AfterViewInit{
         public errors: ErrorHandlerService,
         public AS: AppService,
         public DS: DialogsService,
-        public FPE: FindParentElement,
         public DOM: DOMService,
     ){}
 
@@ -89,19 +86,25 @@ export class ModelingComponent implements AfterViewInit{
     @ViewChild("graphView", {read: ElementRef}) graphView: ElementRef;
     @HostBinding('@routeAnimationRight') routeAnimationRight = true;
     @HostBinding('style.position')  position = 'absolute';
+
     // Set event listener on the host.
-    @HostListener('click', ['$event']) clickHandler(e: Event){
+    @HostListener('click', ['$event']) clickHandler(e: Event): void {
         const TARGET: any = e.target;
         if(this.DOM.compare(TARGET, this.SVGCOMPS)){
-            const SVG = this.FPE.findHTMLElement(TARGET, 'svg').cloneNode(true);
-            this.DOM.svgAttrSetter(SVG, this.SVGATTRS);
-            this.DS.confirm(this.MWTITLE, SVG)
+            const SVG = this.DOM.findHTMLElement(TARGET, 'svg');
+            if(SVG.getAttribute('data-d3-graph')){
+                const SVGClONE = SVG.cloneNode(true);
+                this.DOM.svgAttrSetter(SVGClONE, this.SVGATTRS);
+                this.DS.confirm(this.MWTITLE, SVGClONE)
+            }
         }
     };
 
     ngAfterViewInit(){
         const GV: HTMLElement = this.graphView.nativeElement;
+        // Generate graph while rendering page.
         this.render(this.inputs, GV);
+        // Button 'Lunch' handler. Produce D3 Graph after clicking and manage spinner.
         Observable.fromEvent(this.launch.nativeElement, 'click')
             .do(() => {
                 this.spStVal = 0;
@@ -137,9 +140,12 @@ export class ModelingComponent implements AfterViewInit{
             inputs[0].preDefData,
             inputs[6].preDefData,
             inputs[5].preDefData,
-            inputs[4].preDefData)([inputs[1].preDefData]);
-            // Draw chart
-            this.d3.drawChart(
+            inputs[4].preDefData
+        )(
+            [inputs[1].preDefData]
+        );
+        // Draw chart
+        this.d3.drawChart(
             this.computation.arrG(
                 this.computation.cmptnAlleles(
                     this.computation.bounchCoin1,
@@ -147,7 +153,9 @@ export class ModelingComponent implements AfterViewInit{
                     this.computation.tossing1
                 ),
                 NG
-            )([inputs[2].preDefData]),
+            )(
+                [inputs[2].preDefData]
+            ),
             'Generations',
             'A1',
             ['Eff. population size:', this.computation.harmonic1(NG), 'Generations: ', inputs[1].preDefData ],

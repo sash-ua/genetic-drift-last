@@ -31,9 +31,9 @@ import "hammerjs";
 
 export class AppComponent {
     constructor(
-        private router: Router,
+        public router: Router,
     ){}
-    protected onSwipe(e: Event){
+    onSwipe(e: Event){
         if(e.offsetDirection === 4){
             this.router.navigate(['/instruction']);
         } else if (e.offsetDirection === 2){

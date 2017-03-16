@@ -8,7 +8,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Component, HostBinding } from "@angular/core";
-import { slideInLeftAnimation } from "../../animations/router.animations";
+import { AnimationsServices } from "../../services/animations.service/animations.service";
 var InstructionComponent = (function () {
     function InstructionComponent() {
         this.routeAnimationLeft = true;
@@ -31,7 +31,7 @@ InstructionComponent = __decorate([
         styleUrls: ['instruction.component.css'],
         providers: [],
         animations: [
-            slideInLeftAnimation
+            AnimationsServices.animatonThreeStates('routeAnimationLeft', { opacity: 1, transform: 'translateX(0)' }, [{ opacity: 0, transform: 'translateX(-100%)' }, { opacity: 0, transform: 'translateX(-100%)' }], ['0.4s ease-in', '0.4s ease-out'])
         ]
     })
 ], InstructionComponent);

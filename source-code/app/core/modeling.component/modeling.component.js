@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component, trigger, state, style, transition, animate, HostListener, HostBinding } from "@angular/core";
+import { Component, HostListener, HostBinding, ViewChild, ElementRef } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/debounceTime';
@@ -19,7 +19,7 @@ import { AppService } from "../../services/app.services/app.service";
 import { DialogsService } from "../../services/app.services/dialogs.service";
 import { FindParentElement } from "../../services/app.services/find.parent.element";
 import { DOMService } from "../../services/app.services/dom.service";
-import { slideInRightAnimation } from "../../animations/router.animations";
+import { AnimationsServices } from "../../services/animations.service/animations.service";
 var ModelingComponent = (function () {
     function ModelingComponent(d3, computation, errors, AS, DS, FPE, DOM) {
         this.d3 = d3;
@@ -41,37 +41,11 @@ var ModelingComponent = (function () {
             { preDefData: 0.15, hint: 'Natural decline', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.77.' },
             { preDefData: 0.2, hint: 'Natural growth', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.09.' }
         ];
-        this.spTgl = 'false';
+        this.spTgl = 'out';
         this.spStVal = 0;
         this.routeAnimationRight = true;
         this.position = 'absolute';
     }
-    ModelingComponent.prototype.ngOnInit = function () {
-        var _this = this;
-        this.render(this.inputs);
-        Observable.fromEvent(document.getElementById('launch'), 'click')
-            .do(function () {
-            _this.spStVal = 0;
-            setTimeout(function () {
-                _this.spTgl = 'true';
-                _this.spStVal = _this.AS.rndmGen(15, 40);
-            }, 4);
-        })
-            .debounceTime(400)
-            .do(function () {
-            _this.spStVal = _this.AS.rndmGen(55, 70);
-            _this.render(_this.AS.applInputsData(_this.inputs, _this.AS.collectionDataInputs('input')));
-        })
-            .debounceTime(300)
-            .do(function () {
-            _this.spStVal = _this.AS.rndmGen(75, 95);
-            setTimeout(function () {
-                _this.spTgl = 'false';
-                _this.spStVal = 100;
-            }, 200);
-        })
-            .subscribe(function () { }, function (e) { _this.errors.handleError(e); });
-    };
     // Set event listener on the host.
     ModelingComponent.prototype.clickHandler = function (e) {
         var TARGET = e.target;
@@ -82,20 +56,49 @@ var ModelingComponent = (function () {
         }
     };
     ;
+    ModelingComponent.prototype.ngAfterViewInit = function () {
+        var _this = this;
+        var GV = this.graphView.nativeElement;
+        this.render(this.inputs, GV);
+        Observable.fromEvent(this.launch.nativeElement, 'click')
+            .do(function () {
+            _this.spStVal = 0;
+            setTimeout(function () {
+                _this.spTgl = 'in';
+                _this.spStVal = _this.AS.rndmGen(15, 40);
+            }, 4);
+        })
+            .debounceTime(400)
+            .do(function () {
+            _this.spStVal = _this.AS.rndmGen(55, 70);
+            _this.render(_this.AS.applInputsData(_this.inputs, _this.AS.collectionDataInputs('input')), GV);
+        })
+            .debounceTime(300)
+            .do(function () {
+            _this.spStVal = _this.AS.rndmGen(75, 95);
+            setTimeout(function () {
+                _this.spTgl = 'out';
+                _this.spStVal = 100;
+            }, 200);
+        })
+            .subscribe(function () { }, function (e) { _this.errors.handleError(e); });
+    };
     // Render array type of Inputs with D3
-    ModelingComponent.prototype.render = function (inputs) {
+    ModelingComponent.prototype.render = function (inputs, view) {
         var NG = this.computation.arrG(this.computation.NGen, this.computation.NRandom, inputs[0].preDefData, inputs[6].preDefData, inputs[5].preDefData, inputs[4].preDefData)([inputs[1].preDefData]);
         // Draw chart
-        this.d3.drawChart(this.computation.arrG(this.computation.cmptnAlleles(this.computation.bounchCoin1, inputs[3].preDefData, this.computation.tossing1), NG)([inputs[2].preDefData]), 'Generations', 'A1', ['Eff. population size:', this.computation.harmonic1(NG), 'Generations: ', inputs[1].preDefData], inputs[1].preDefData, document.getElementById('out-chart'));
+        this.d3.drawChart(this.computation.arrG(this.computation.cmptnAlleles(this.computation.bounchCoin1, inputs[3].preDefData, this.computation.tossing1), NG)([inputs[2].preDefData]), 'Generations', 'A1', ['Eff. population size:', this.computation.harmonic1(NG), 'Generations: ', inputs[1].preDefData], inputs[1].preDefData, view);
     };
     return ModelingComponent;
 }());
 __decorate([
-    HostListener('click', ['$event']),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Event]),
-    __metadata("design:returntype", void 0)
-], ModelingComponent.prototype, "clickHandler", null);
+    ViewChild("launch", { read: ElementRef }),
+    __metadata("design:type", ElementRef)
+], ModelingComponent.prototype, "launch", void 0);
+__decorate([
+    ViewChild("graphView", { read: ElementRef }),
+    __metadata("design:type", ElementRef)
+], ModelingComponent.prototype, "graphView", void 0);
 __decorate([
     HostBinding('@routeAnimationRight'),
     __metadata("design:type", Object)
@@ -104,20 +107,20 @@ __decorate([
     HostBinding('style.position'),
     __metadata("design:type", Object)
 ], ModelingComponent.prototype, "position", void 0);
+__decorate([
+    HostListener('click', ['$event']),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Event]),
+    __metadata("design:returntype", void 0)
+], ModelingComponent.prototype, "clickHandler", null);
 ModelingComponent = __decorate([
     Component({
         moduleId: module.id,
-        template: "<section class=\"wrapper wrapper__modeling\">\n        <h2>Visualization</h2>\n        <form>\n            <app-input *ngFor=\"let input of inputs;\" \n                [app-input-data]=\"input\" \n                [mdTooltip]=\"input.toolTip\"\n                [mdTooltipPosition]=\"'left'\"\n                [mdTooltipShowDelay]=\"50\"\n                class=\"modeling__inputs\" type=\"number\"></app-input>\n            <button md-raised-button class=\"modeling__btn\" id=\"launch\">Launch</button>\n            <progress-spinner-i [spinner-start-val]=\"spStVal\" \n                                [spinner-tgl]=\"spTgl\" \n                                [@openHide]=\"spTgl\"></progress-spinner-i>\n        </form>\n        <div id=\"out-chart\"></div>\n    </section>",
+        template: "<section class=\"wrapper wrapper__modeling\">\n        <h2>Visualization</h2>\n        <form>\n            <app-input *ngFor=\"let input of inputs;\" \n                [app-input-data]=\"input\" \n                [mdTooltip]=\"input.toolTip\"\n                [mdTooltipPosition]=\"'left'\"\n                [mdTooltipShowDelay]=\"50\"\n                class=\"modeling__inputs\" type=\"number\">\n            </app-input>\n            <button md-raised-button class=\"modeling__btn\" #launch>Launch</button>\n            <progress-spinner-i [spinner-start-val]=\"spStVal\"\n                                [@openHide]=\"spTgl\">   \n            </progress-spinner-i>       \n        </form>\n        <div id=\"graphView\" #graphView></div>\n    </section>",
         styleUrls: ['modeling.component.css'],
         animations: [
-            trigger('openHide', [
-                state('true', style({ display: 'block', opacity: 1, transform: 'translateZ(0)' })),
-                state('false', style({ display: 'none', opacity: 0, transform: 'translateZ(0)' })),
-                transition('* <=> *', [
-                    animate(300)
-                ])
-            ]),
-            slideInRightAnimation
+            AnimationsServices.animatonThreeStates('routeAnimationRight', { opacity: 1, transform: 'translateX(0)' }, [{ opacity: 0, transform: 'translateX(100%)' }, { opacity: 0, transform: 'translateX(100%)' }], ['0.4s ease-in', '0.4s ease-out']),
+            AnimationsServices.animatonTwoStates('openHide', ['in', 'out'], [{ display: 'block', opacity: 1, transform: 'translateZ(0)' }, { display: 'none', opacity: 0, transform: 'translateZ(0)' }], ['300ms', '300ms'])
         ],
         providers: [
             ComputationService,

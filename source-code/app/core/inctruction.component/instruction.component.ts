@@ -1,6 +1,6 @@
 
 import {Component, HostBinding} from "@angular/core";
-import {slideInLeftAnimation} from "../../animations/router.animations";
+import { AnimationsServices} from "../../services/animations.service/animations.service";
 
 @Component({
     moduleId: module.id,
@@ -27,9 +27,12 @@ import {slideInLeftAnimation} from "../../animations/router.animations";
     styleUrls: ['instruction.component.css'],
     providers: [],
     animations: [
-        slideInLeftAnimation
-    ]
-
+        AnimationsServices.animatonThreeStates(
+            'routeAnimationLeft',
+            {opacity: 1, transform: 'translateX(0)'},
+            [{opacity: 0, transform: 'translateX(-100%)'}, {opacity: 0, transform: 'translateX(-100%)'}],
+            ['0.4s ease-in', '0.4s ease-out']
+        )]
 })
 
 export class InstructionComponent{

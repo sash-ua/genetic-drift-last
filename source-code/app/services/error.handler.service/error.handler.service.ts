@@ -3,8 +3,6 @@ import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class ErrorHandlerService {
-    constructor() { }
-
     handleError (error: any): Observable<ErrorHandlerService> {
         console.log(error); // log to console instead to pass error to some handler service
         return Observable.throw(error);

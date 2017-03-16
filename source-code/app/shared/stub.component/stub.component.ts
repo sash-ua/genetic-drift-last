@@ -1,16 +1,17 @@
-import {Component, OnInit, Input, Renderer} from '@angular/core';
+import {Component, OnInit, Input, Renderer, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
 
 @Component({
     moduleId: module.id,
     selector: 'stub-cmpnt',
-    template: ` <div id="stub-body"></div>`
+    template: ` <div #stubBody></div>`
 })
-export class StubComponent implements OnInit {
+export class StubComponent implements AfterViewInit {
+    @ViewChild("stubBody", {read: ElementRef}) stubBody: ElementRef;
     constructor(
-        private renderer: Renderer
+        public renderer: Renderer
     ) { }
-    ngOnInit() {
-        this.renderer.projectNodes(document.getElementById('stub-body'), [this.body]);
+    ngAfterViewInit() {
+        this.renderer.projectNodes(this.stubBody.nativeElement, [this.body]);
     }
     @Input ('stub-cmpnt-body') body: any;
 }

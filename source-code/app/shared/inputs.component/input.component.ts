@@ -17,7 +17,9 @@ import {InputValidatorService} from "../../services/app.services/inut.validator.
     ]
 })
  export  class  InputComponent{
-    constructor(private validation: InputValidatorService){}
+    constructor(
+        public validation: InputValidatorService
+    ){}
     @Input('app-input-data') input: object;
 }
 

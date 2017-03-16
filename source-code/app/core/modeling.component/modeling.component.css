@@ -9,13 +9,14 @@ form{
     position : relative;
     width : 990px;
 }
-#out-chart{
+#graphView{
+    display: inline;
     margin : 0 auto;
     position : relative;
     cursor : pointer;
 }
 @media (max-width: 1024px) {
-    #out-chart {
+    #graphView {
         width: 100%;
     }
     form{

@@ -1,25 +1,16 @@
 'use strict';
 
 var gulp = require('gulp'),
-    //gulpif = require('gulp-if'),
     fs = require('fs'),
     watch = require('gulp-watch'),
     gzip = require('gulp-gzip'),
     autoprefixer = require('gulp-autoprefixer'),
-    // uglify = require('gulp-uglify'),
     sourcemaps = require('gulp-sourcemaps'),
     cssmin = require('gulp-clean-css'),
-    // uncss = require('gulp-uncss'),
-    // imagemin = require('gulp-imagemin'),
-    // pngquant = require('imagemin-pngquant'),
-    //ignore = require('gulp-ignore'),
-    //rimraf = require('rimraf'),
     gulpRimraf = require('gulp-rimraf'),
-    // gSvg2png = require('gulp-svg2png' ),
     svgSprite = require('gulp-svg-sprite'),
     sass = require('gulp-sass'),
     remapIstanbul = require('remap-istanbul/lib/gulpRemapIstanbul'),
-    //concat = require('gulp-concat' ),
     browserSync = require('browser-sync'),
     reload = browserSync.reload;
 

@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class InputValidatorService {
-    constructor() { }
-
     // Input string validation. First stage, second's in app.service.applInputsData
     inputValidator(val: string, cond: Range): any{
         const v: number = +val;

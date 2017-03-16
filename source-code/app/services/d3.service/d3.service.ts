@@ -3,8 +3,6 @@ import * as d3 from "d3";
 
 @Injectable()
 export class D3Service{
-    constructor(){}
-
     drawChart(
         data: Array<any>,
         x_label: string,

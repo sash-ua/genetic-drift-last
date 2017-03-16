@@ -7,16 +7,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component, Input, Renderer } from '@angular/core';
+import { Component, Input, Renderer, ViewChild, ElementRef } from '@angular/core';
 var StubComponent = (function () {
     function StubComponent(renderer) {
         this.renderer = renderer;
     }
-    StubComponent.prototype.ngOnInit = function () {
-        this.renderer.projectNodes(document.getElementById('stub-body'), [this.body]);
+    StubComponent.prototype.ngAfterViewInit = function () {
+        this.renderer.projectNodes(this.stubBody.nativeElement, [this.body]);
     };
     return StubComponent;
 }());
+__decorate([
+    ViewChild("stubBody", { read: ElementRef }),
+    __metadata("design:type", ElementRef)
+], StubComponent.prototype, "stubBody", void 0);
 __decorate([
     Input('stub-cmpnt-body'),
     __metadata("design:type", Object)
@@ -25,7 +29,7 @@ StubComponent = __decorate([
     Component({
         moduleId: module.id,
         selector: 'stub-cmpnt',
-        template: " <div id=\"stub-body\"></div>"
+        template: " <div #stubBody></div>"
     }),
     __metadata("design:paramtypes", [Renderer])
 ], StubComponent);

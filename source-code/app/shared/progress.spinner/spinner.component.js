@@ -23,18 +23,13 @@ __decorate([
     Input('spinner-start-val'),
     __metadata("design:type", MaterialModule)
 ], SpinnerComponent.prototype, "value", void 0);
-__decorate([
-    Input('spinner-tgl'),
-    __metadata("design:type", String)
-], SpinnerComponent.prototype, "toggle", void 0);
 SpinnerComponent = __decorate([
     Component({
         moduleId: module.id,
         selector: 'progress-spinner-i',
-        template: "<md-spinner [mode]=\"mode\" [value]=\"value\" [class.visibility]=\"toggle\"></md-spinner>",
+        template: "<md-spinner [mode]=\"mode\" [value]=\"value\"></md-spinner>",
         styleUrls: ['spinner.component.css']
-    }),
-    __metadata("design:paramtypes", [])
+    })
 ], SpinnerComponent);
 export { SpinnerComponent };
 //Copyright (c) 2017 Alex Tranchenko. All rights reserved.

@@ -1,7 +1,7 @@
 import {
     Injectable, trigger, state, style, transition, animate, AnimationEntryMetadata
 } from '@angular/core';
-import {AnimationT, AnimationStylesT} from "../../types/types";
+import {AnimationT, AnimationStylesT} from "../types/types";
 
 @Injectable()
 export class AnimationsServices {
@@ -31,7 +31,7 @@ export class AnimationsServices {
             ])
         ])
     }
- // ToDo. Work in JIT but cannot pass compilation for AOT
+ // ToDo. Work in JIT but cannot pass ng-compilation for AOT
     // static animatonTwoStates(name: string, [...states]: Array<any>, [...stylesAnim]: AnimationT[], [...trs]: Array<any>): AnimationEntryMetadata{
     //     let [a, b] = states.map(function(v, i, arr){
     //         return [state(v, style(stylesAnim[i])), transition((i === 0) ? `${arr[i]} => ${arr[i+1]}` : `${arr[i-1]} => ${arr[i]}`, animate(trs[i]))];

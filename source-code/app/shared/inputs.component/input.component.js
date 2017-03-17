@@ -8,7 +8,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Component, Input } from "@angular/core";
-import { InputValidatorService } from "../../services/app.services/inut.validator.service";
+import { InputValidatorService } from "../../services/inut.validator.service";
 var InputComponent = (function () {
     function InputComponent(validation) {
         this.validation = validation;
@@ -23,7 +23,7 @@ InputComponent = __decorate([
     Component({
         selector: 'app-input',
         template: "<md-input \n            [value]=\"input.preDefData\" \n            [hintLabel]=\"input.hint\" \n            [dividerColor]=\"input.dvdrColor\" \n            (input)=\"id.value = validation.inputValidator(id.value, input.interval)\" \n            #id \n            class=\"my-input\"></md-input>",
-        styles: ['.my-input { margin: 20px 10px}'],
+        styles: ['.my-input { margin: 10px 10px}'],
         providers: [
             InputValidatorService
         ]

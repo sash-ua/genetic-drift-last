@@ -9,7 +9,7 @@ import {CoreModule} from "./core/core.module";
 import {SharedModule} from "./shared/shared.module";
 // Components & services
 import {AppComponent} from "./AppComponent";
-import {ErrorHandlerService} from "./services/error.handler.service/error.handler.service";
+import {ErrorHandlerService} from "./services/error.handler.service";
 import {HammerConfig} from "./app.configs/hammerjs.config";
 
 

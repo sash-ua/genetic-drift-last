@@ -1,6 +1,6 @@
 
 import {Component, HostBinding} from "@angular/core";
-import { AnimationsServices} from "../../services/animations.service/animations.service";
+import { AnimationsServices} from "../../services/animations.service";
 
 @Component({
     moduleId: module.id,
@@ -12,9 +12,9 @@ import { AnimationsServices} from "../../services/animations.service/animations.
         <p class="introduction__txt">The effective population size is a key concept - it is the size of an ideal (Wright-Fisher) 
             population that shows the same decay of genetic variation as the actual population of interest.</p>
         <h2>Legend</h2>
-        <p class="introduction__txt">Population - the number of people in the population, minimal value two.</p>
-        <p class="introduction__txt">Generations - the number of generation, minimal value one.</p>
-        <p class="introduction__txt">Simulations - the number of simulation, minimal value one.</p>
+        <p class="introduction__txt">Population - the number of people in the population, integer, minimal value 2.</p>
+        <p class="introduction__txt">Generations - the number of generation, integer, minimal value 1.</p>
+        <p class="introduction__txt">Simulations - the number of simulation, integer, minimal value 1.</p>
         <p class="introduction__txt">Init. Alleles Balance - the balance of alleles (A1A2) in the genotype, value from 0 to 1.</p>
         <p class="introduction__txt">Bottle Neck Probability (BNP) - the probability occurrence of events that strongly change the size of a population, 
             like migration, epidemics, wars etc. When BNP occur the population randomly decrease. Value from 0 to 1. 

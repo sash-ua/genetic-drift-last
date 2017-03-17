@@ -12,32 +12,34 @@ import { Observable } from "rxjs/Observable";
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/debounceTime';
 import { MdDialogRef } from "@angular/material";
-import { D3Service } from "../../services/d3.service/d3.service";
-import { ComputationService } from "../../services/computation.service/computation.service";
-import { ErrorHandlerService } from "../../services/error.handler.service/error.handler.service";
-import { AppService } from "../../services/app.services/app.service";
-import { DialogsService } from "../../services/app.services/dialogs.service";
-import { DOMService } from "../../services/app.services/dom.service";
-import { AnimationsServices } from "../../services/animations.service/animations.service";
+import { D3Service } from "../../services/d3.service";
+import { ComputationService } from "../../services/computation.service";
+import { ErrorHandlerService } from "../../services/error.handler.service";
+import { DialogsService } from "../../services/dialogs.service";
+import { DOMService } from "../../services/dom.service";
+import { AnimationsServices } from "../../services/animations.service";
+import { SpecificService } from "../../services/specific.service";
 var ModelingComponent = (function () {
-    function ModelingComponent(d3, computation, errors, AS, DS, DOM) {
-        this.d3 = d3;
-        this.computation = computation;
-        this.errors = errors;
-        this.AS = AS;
+    function ModelingComponent(D3, CS, ES, SS, DS, DOMS) {
+        this.D3 = D3;
+        this.CS = CS;
+        this.ES = ES;
+        this.SS = SS;
         this.DS = DS;
-        this.DOM = DOM;
+        this.DOMS = DOMS;
         this.MWTITLE = "Graph";
-        this.SVGATTRS = [['preserveAspectRatio', 'xMidYMid meet'], ['viewBox', '0 0 305 305'], ['height', '100%'], ['width', this.AS.dimension(0.35, 0.4)]];
+        this.SVGATTRS = [['preserveAspectRatio', 'xMidYMid meet'], ['viewBox', '0 0 305 305'], ['height', '100%'], ['width', this.SS.dimension(0.35, 0.4)]];
         this.SVGCOMPS = ['svg', 'g', 'tspan', 'text', 'path'];
+        this.TOOLTIPD = 100;
+        this.TOOLTIPPOS = 'above';
         this.inputs = [
-            { preDefData: 1000, hint: 'Population', dvdrColor: 'warn', interval: [2], toolTip: 'Integer number from 2' },
-            { preDefData: 100, hint: 'Generations', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1' },
-            { preDefData: 2, hint: 'Simulations', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1' },
-            { preDefData: 0.5, hint: 'Init. Alleles Balance', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.164' },
-            { preDefData: 0.1, hint: 'Bottle Neck Probability', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.2' },
-            { preDefData: 0.15, hint: 'Natural decline', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.77.' },
-            { preDefData: 0.2, hint: 'Natural growth', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.09.' }
+            { preDefData: 1000, hint: 'Population, > 2', dvdrColor: 'warn', interval: [2], toolTip: 'Integer number from 2' },
+            { preDefData: 100, hint: 'Generations, > 1', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1' },
+            { preDefData: 2, hint: 'Simulations, > 1', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1' },
+            { preDefData: 0.5, hint: 'Init. Alleles Balance, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.164' },
+            { preDefData: 0.1, hint: 'Bottle Neck Probability, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.2' },
+            { preDefData: 0.15, hint: 'Natural decline, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.77.' },
+            { preDefData: 0.2, hint: 'Natural growth, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.09.' }
         ];
         this.spTgl = 'out';
         this.spStVal = 0;
@@ -47,11 +49,11 @@ var ModelingComponent = (function () {
     // Set event listener on the host.
     ModelingComponent.prototype.clickHandler = function (e) {
         var TARGET = e.target;
-        if (this.DOM.compare(TARGET, this.SVGCOMPS)) {
-            var SVG = this.DOM.findHTMLElement(TARGET, 'svg');
-            if (SVG.getAttribute('data-d3-graph')) {
+        if (this.DOMS.compare(TARGET, this.SVGCOMPS)) {
+            var SVG = this.DOMS.findHTMLElement(TARGET, 'svg');
+            if (SVG.getAttribute('data-D3-graph')) {
                 var SVGClONE = SVG.cloneNode(true);
-                this.DOM.svgAttrSetter(SVGClONE, this.SVGATTRS);
+                this.DOMS.svgAttrSetter(SVGClONE, this.SVGATTRS);
                 this.DS.confirm(this.MWTITLE, SVGClONE);
             }
         }
@@ -68,29 +70,29 @@ var ModelingComponent = (function () {
             _this.spStVal = 0;
             setTimeout(function () {
                 _this.spTgl = 'in';
-                _this.spStVal = _this.AS.rndmGen(15, 40);
+                _this.spStVal = _this.CS.rndmGen(15, 40);
             }, 4);
         })
             .debounceTime(400)
             .do(function () {
-            _this.spStVal = _this.AS.rndmGen(55, 70);
-            _this.render(_this.AS.applInputsData(_this.inputs, _this.AS.collectionDataInputs('input')), GV);
+            _this.spStVal = _this.CS.rndmGen(55, 70);
+            _this.render(_this.SS.applInputsData(_this.inputs, _this.SS.collectionDataInputs('input')), GV);
         })
             .debounceTime(300)
             .do(function () {
-            _this.spStVal = _this.AS.rndmGen(75, 95);
+            _this.spStVal = _this.CS.rndmGen(75, 95);
             setTimeout(function () {
                 _this.spTgl = 'out';
                 _this.spStVal = 100;
             }, 200);
         })
-            .subscribe(function () { }, function (e) { _this.errors.handleError(e); });
+            .subscribe(function () { }, function (e) { _this.ES.handleError(e); });
     };
     // Render array type of Inputs with D3
     ModelingComponent.prototype.render = function (inputs, view) {
-        var NG = this.computation.arrG(this.computation.NGen, this.computation.NRandom, inputs[0].preDefData, inputs[6].preDefData, inputs[5].preDefData, inputs[4].preDefData)([inputs[1].preDefData]);
+        var NG = this.CS.arrG(this.CS.NGen, this.CS.NRandom, inputs[0].preDefData, inputs[6].preDefData, inputs[5].preDefData, inputs[4].preDefData)([inputs[1].preDefData]);
         // Draw chart
-        this.d3.drawChart(this.computation.arrG(this.computation.cmptnAlleles(this.computation.bounchCoin1, inputs[3].preDefData, this.computation.tossing1), NG)([inputs[2].preDefData]), 'Generations', 'A1', ['Eff. population size:', this.computation.harmonic1(NG), 'Generations: ', inputs[1].preDefData], inputs[1].preDefData, view);
+        this.D3.drawChart(this.CS.arrG(this.CS.cmptnAlleles(this.CS.bounchCoin1, inputs[3].preDefData, this.CS.tossing1), NG)([inputs[2].preDefData]), 'Generations', 'A1', ['Eff. population size:', this.CS.harmonic1(NG), 'Generations: ', inputs[1].preDefData], inputs[1].preDefData, view);
     };
     return ModelingComponent;
 }());
@@ -119,7 +121,7 @@ __decorate([
 ModelingComponent = __decorate([
     Component({
         moduleId: module.id,
-        template: "<section class=\"wrapper wrapper__modeling\">\n        <h2>Visualization</h2>\n        <form>\n            <app-input *ngFor=\"let input of inputs;\" \n                [app-input-data]=\"input\" \n                [mdTooltip]=\"input.toolTip\"\n                [mdTooltipPosition]=\"'left'\"\n                [mdTooltipShowDelay]=\"50\"\n                class=\"modeling__inputs\" type=\"number\">\n            </app-input>\n            <button md-raised-button class=\"modeling__btn\" #launch>Launch</button>\n            <progress-spinner-i [spinner-start-val]=\"spStVal\"\n                                [@openHide]=\"spTgl\">   \n            </progress-spinner-i>       \n        </form>\n        <div id=\"graphView\" #graphView></div>\n    </section>",
+        template: "<section class=\"wrapper wrapper__modeling\">\n        <h2>Visualization</h2>\n        <form>\n            <app-input *ngFor=\"let input of inputs;\" \n                [app-input-data]=\"input\" \n                [mdTooltip]=\"input.toolTip\"\n                [mdTooltipPosition]=\"TOOLTIPPOS\"\n                [mdTooltipShowDelay]=\"TOOLTIPD\"\n                class=\"modeling__inputs\" type=\"number\">\n            </app-input>\n            <button md-raised-button class=\"modeling__btn\" #launch>Launch</button>\n            <progress-spinner-i [spinner-start-val]=\"spStVal\"\n                                [@openHide]=\"spTgl\">   \n            </progress-spinner-i>       \n        </form>\n        <div id=\"graphView\" #graphView></div>\n    </section>",
         styleUrls: ['modeling.component.css'],
         animations: [
             AnimationsServices.animatonThreeStates('routeAnimationRight', { opacity: 1, transform: 'translateX(0)' }, [{ opacity: 0, transform: 'translateX(100%)' }, { opacity: 0, transform: 'translateX(100%)' }], ['0.4s ease-in', '0.4s ease-out']),
@@ -128,7 +130,7 @@ ModelingComponent = __decorate([
         providers: [
             ComputationService,
             ErrorHandlerService,
-            AppService,
+            SpecificService,
             DialogsService,
             DOMService
         ]
@@ -136,7 +138,7 @@ ModelingComponent = __decorate([
     __metadata("design:paramtypes", [D3Service,
         ComputationService,
         ErrorHandlerService,
-        AppService,
+        SpecificService,
         DialogsService,
         DOMService])
 ], ModelingComponent);

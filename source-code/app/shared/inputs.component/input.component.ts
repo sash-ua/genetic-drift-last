@@ -1,5 +1,5 @@
 import {Component, Input} from "@angular/core";
-import {InputValidatorService} from "../../services/app.services/inut.validator.service";
+import {InputValidatorService} from "../../services/inut.validator.service";
 
 @Component({
     selector: 'app-input',
@@ -11,7 +11,7 @@ import {InputValidatorService} from "../../services/app.services/inut.validator.
             (input)="id.value = validation.inputValidator(id.value, input.interval)" 
             #id 
             class="my-input"></md-input>`,
-    styles:['.my-input { margin: 20px 10px}'],
+    styles:['.my-input { margin: 10px 10px}'],
     providers:[
         InputValidatorService
     ]

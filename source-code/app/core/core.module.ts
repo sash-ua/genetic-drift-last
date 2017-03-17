@@ -7,8 +7,8 @@ import {InstructionComponent} from "./inctruction.component/instruction.componen
 import {ModelingComponent, ModalWindowComponent} from "./modeling.component/modeling.component";
 import {AppRoutingModule} from "./app-routing.module";
 import {SharedModule} from "../shared/shared.module";
-import {D3Service} from "../services/d3.service/d3.service";
-import {DialogsService} from "../services/app.services/dialogs.service";
+import {D3Service} from "../services/d3.service";
+import {DialogsService} from "../services/dialogs.service";
 import {MaterialModule} from "@angular/material";
 
 @NgModule({

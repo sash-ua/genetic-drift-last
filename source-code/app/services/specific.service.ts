@@ -14,7 +14,7 @@ export class SpecificService {
 
     // Return 0 if given value is undef. or null or function return value if it exist.
     isExist(val: any){
-        return val ? val : 0;
+        return val ? val : null;
     }
 
     // Return arr: Inputs from collectioned users data, if they acceptable they add to returned array.

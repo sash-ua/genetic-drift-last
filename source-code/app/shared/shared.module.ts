@@ -22,8 +22,7 @@ import {StubComponent} from "./stub.component/stub.component";
     exports: [
         InputComponent,
         SpinnerComponent,
-        StubComponent,
-        MaterialModule
+        StubComponent
     ],
     providers: []
 })

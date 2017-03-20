@@ -22,7 +22,7 @@ __decorate([
 InputComponent = __decorate([
     Component({
         selector: 'app-input',
-        template: "<md-input \n            [value]=\"input.preDefData\" \n            [hintLabel]=\"input.hint\" \n            [dividerColor]=\"input.dvdrColor\" \n            (input)=\"id.value = validation.inputValidator(id.value, input.interval)\" \n            #id \n            class=\"my-input\"></md-input>",
+        template: "<md-input-container\n                [dividerColor]=\"input.dvdrColor\"\n                class=\"my-input\">\n            <input mdInput\n                [value]=\"input.preDefData\"\n                [placeholder]=\"input.hint\"\n                (input)=\"id.value = validation.inputControl(id.value, input.interval)\" \n                #id>\n        </md-input-container>\n                ",
         styles: ['.my-input { margin: 10px 10px}'],
         providers: [
             InputValidatorService

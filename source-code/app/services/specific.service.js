@@ -21,7 +21,7 @@ var SpecificService = (function () {
     };
     // Return 0 if given value is undef. or null or function return value if it exist.
     SpecificService.prototype.isExist = function (val) {
-        return val ? val : 0;
+        return val ? val : null;
     };
     // Return arr: Inputs from collectioned users data, if they acceptable they add to returned array.
     // (values should be from acceptable interval of possible values)

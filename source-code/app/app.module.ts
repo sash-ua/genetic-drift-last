@@ -19,7 +19,7 @@ import {HammerConfig} from "./app.configs/hammerjs.config";
         FormsModule,
         SharedModule,
         CoreModule,
-        MaterialModule.forRoot()
+        MaterialModule
     ],
     declarations: [
         AppComponent

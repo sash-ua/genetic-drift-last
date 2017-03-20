@@ -26,7 +26,7 @@ import {SpecificService} from "../../services/specific.service";
                 [mdTooltip]="input.toolTip"
                 [mdTooltipPosition]="TOOLTIPPOS"
                 [mdTooltipShowDelay]="TOOLTIPD"
-                class="modeling__inputs" type="number">
+                class="modeling__inputs">
             </app-input>
             <button md-raised-button class="modeling__btn" #launch>Launch</button>
             <progress-spinner-i [spinner-start-val]="spStVal"
@@ -65,13 +65,13 @@ export class ModelingComponent implements AfterViewInit{
     TOOLTIPD: number = 100;
     TOOLTIPPOS: string = 'above';
     inputs: Inputs = [
-        {preDefData: 1000, hint: 'Population, > 2', dvdrColor: 'warn', interval: [2], toolTip: 'Integer number from 2'},
-        {preDefData: 100, hint: 'Generations, > 1', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1'},
-        {preDefData: 2, hint: 'Simulations, > 1', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1'},
-        {preDefData: 0.5, hint: 'Init. Alleles Balance, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.164'},
-        {preDefData: 0.1, hint: 'Bottle Neck Probability, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.2'},
-        {preDefData: 0.15, hint: 'Natural decline, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.77.'},
-        {preDefData: 0.2, hint: 'Natural growth, [0, 1]', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.09.'}
+        {preDefData: 1000, hint: 'Population', dvdrColor: 'warn', interval: [2], toolTip: 'Integer number from 2'},
+        {preDefData: 100, hint: 'Generations', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1'},
+        {preDefData: 2, hint: 'Simulations', dvdrColor: 'warn', interval: [1], toolTip: 'Integer number from 1'},
+        {preDefData: 0.5, hint: 'Init. Alleles Balance', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.164'},
+        {preDefData: 0.1, hint: 'Bottle Neck Probability', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.2'},
+        {preDefData: 0.15, hint: 'Natural decline', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.77'},
+        {preDefData: 0.2, hint: 'Natural growth', dvdrColor: 'primary', interval: [0, 1], toolTip: 'Value from 0 to 1, for ex. 0.09'}
     ];
     spTgl: string = 'out';
     spStVal: number = 0;

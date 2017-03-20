@@ -29,7 +29,7 @@ AppModule = __decorate([
             FormsModule,
             SharedModule,
             CoreModule,
-            MaterialModule.forRoot()
+            MaterialModule
         ],
         declarations: [
             AppComponent

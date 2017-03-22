@@ -27,7 +27,7 @@ var SpecificService = (function () {
     // (values should be from acceptable interval of possible values)
     SpecificService.prototype.applInputsData = function (inputs, arr) {
         return inputs.map(function (v, i, a) {
-            if (arr[i] >= v.interval[0]) {
+            if (arr[i] >= v.interval[0] && arr[i] !== v.preDefData) {
                 v.preDefData = arr[i];
                 return v;
             }

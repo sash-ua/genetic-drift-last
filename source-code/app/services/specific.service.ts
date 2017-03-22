@@ -21,7 +21,7 @@ export class SpecificService {
     // (values should be from acceptable interval of possible values)
     applInputsData(inputs: Inputs, arr: Range): Inputs {
         return  inputs.map((v, i, a) => {
-            if(arr[i] >= v.interval[0]){
+            if(arr[i] >= v.interval[0] && arr[i] !== v.preDefData){
                 v.preDefData = arr[i];
                 return v;
             } else {

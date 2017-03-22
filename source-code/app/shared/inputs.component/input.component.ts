@@ -1,7 +1,5 @@
-import {Component, Input, ViewChild, ElementRef, OnInit} from "@angular/core";
+import {Component, Input} from "@angular/core";
 import {InputValidatorService} from "../../services/inut.validator.service";
-import {FormControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {VALID} from "@angular/forms/src/model";
 
 @Component({
     selector: 'app-input',
